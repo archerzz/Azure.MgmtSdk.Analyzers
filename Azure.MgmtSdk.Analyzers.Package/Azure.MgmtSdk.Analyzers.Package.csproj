@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>Azure.MgmtSDK.Analyzer</PackageId>
+    <PackageId>Azure.MgmtSdk.Analyzers</PackageId>
     <PackageVersion>0.1.0.0</PackageVersion>
     <Authors>mingzhehuang</Authors>
     <PackageLicenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</PackageLicenseUrl>
@@ -16,7 +16,7 @@
     <PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>
     <RepositoryUrl>http://REPOSITORY_URL_HERE_OR_DELETE_THIS_LINE</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Description>Analyzer for Azure Management SDK</Description>
+    <Description>Analyzer for Azure .Net Management SDK</Description>
     <PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
     <Copyright>Copyright</Copyright>
     <PackageTags>auzre, Azure.MgmtSDK.Analyzer, analyzers</PackageTags>
