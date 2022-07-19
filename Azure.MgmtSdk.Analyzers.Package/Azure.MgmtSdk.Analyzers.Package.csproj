@@ -42,7 +42,7 @@
     </ItemGroup>
   </Target>
   <Target Name="DevPack" AfterTargets="Build">
-	<Exec Command="dotnet pack -p:PackageVersion=$(PackageVersion)-dev-$([System.DateTime]::Now.ToString(&quot;yyyy-MM-dd-HHmm&quot;)) --no-build --configuration $(Configuration)" />
+	<Exec Command="dotnet pack -p:PackageVersion=$(PackageVersion)-dev-$([System.DateTime]::Now.ToString(&quot;yyyyMMddHHmm&quot;)) --no-build --configuration $(Configuration)" />
   </Target>
 
 </Project>
