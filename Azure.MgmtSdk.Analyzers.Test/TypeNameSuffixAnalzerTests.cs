@@ -37,5 +37,18 @@ class MonitorResult
             var expected = VerifyCS.Diagnostic(TypeNameSuffixAnalyzer.DiagnosticId).WithSpan(3, 28, 3, 73).WithArguments("ApplicationGatewayAvailableWafRuleSetsResults", "Results");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
+
+        [TestMethod]
+        public async Task ResponseParameters()
+        {
+            var test = @"namespace Test
+{
+    internal partial class ResponseParameters
+    {
+    }
+}";
+            var expected = VerifyCS.Diagnostic(TypeNameSuffixAnalyzer.DiagnosticId).WithSpan(3, 28, 3, 46).WithArguments("ResponseParameters", "Parameters");
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+        }
     }
 }

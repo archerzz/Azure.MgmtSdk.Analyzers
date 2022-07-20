@@ -16,4 +16,5 @@ Analyzers for Azure .NET Management SDK
     <PackageReference Include="Azure.MgmtSdk.Analyzers"></PackageReference>
   </ItemGroup>
 ```
-5. Command `dotnet build` to finish the SDK Generation process.
+5. Command `donet clean` to clean previous settings.
+6. Command `dotnet build` to finish the SDK Generation process.
