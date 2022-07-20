@@ -33,15 +33,7 @@ namespace Azure.MgmtSdk.Analyzers
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.EnableConcurrentExecution();
-            context.RegisterCompilationStartAction(ComilationStart);
-        }
-
-        private void ComilationStart(CompilationStartAnalysisContext context)
-        {
-            if (context.Compilation.SourceModule.Name.StartsWith("Azure.ResourceManager"))
-            {
-                context.RegisterSymbolAction(AnalyzeSuffix, SymbolKind.NamedType);
-            }
+            context.RegisterSymbolAction(AnalyzeSuffix, SymbolKind.NamedType);
         }
 
         private void AnalyzeSuffix(SymbolAnalysisContext context)
