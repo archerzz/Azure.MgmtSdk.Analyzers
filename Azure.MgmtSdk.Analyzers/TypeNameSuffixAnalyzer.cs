@@ -25,7 +25,8 @@ namespace Azure.MgmtSdk.Analyzers
             description: Description);
 
         // TODO: add more problematic suffixes here
-        private static readonly Regex SuffixRegex = new Regex(".+(?<Suffix>(Results?)|(Responses?))$");
+        private static readonly Regex SuffixRegex = new Regex(".+(?<Suffix>(Results?)|(Requests?)|(Responses?)|(Parameters?)|(Options?))$");
+
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
@@ -43,8 +44,6 @@ namespace Azure.MgmtSdk.Analyzers
             {
                 return;
             }
-
-
             var match = SuffixRegex.Match(name);
             if (match.Success)
             {
