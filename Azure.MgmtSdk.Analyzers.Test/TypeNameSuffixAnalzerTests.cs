@@ -10,7 +10,7 @@ namespace Azure.MgmtSdk.Analyzers.Test
     public class TypeNameSuffixAnalyzerTests
     {
         [TestMethod]
-        public async Task NameEndWithResult()
+        public async Task AZM0010NameEndWithResult()
         {
             var test = @"using System;
 
@@ -26,7 +26,7 @@ class MonitorResult
         }
 
         [TestMethod]
-        public async Task ApplicationGatewayResult()
+        public async Task AZM0010ApplicationGatewayResult()
         {
             var test = @"namespace Test
 {
@@ -39,15 +39,15 @@ class MonitorResult
         }
 
         [TestMethod]
-        public async Task ResponseParameters()
+        public async Task AZM0010ResponseParameters()
         {
             var test = @"namespace Test
 {
-    internal partial class ResponseParameters
+    public class ResponseParameters
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(TypeNameSuffixAnalyzer.DiagnosticId).WithSpan(3, 28, 3, 46).WithArguments("ResponseParameters", "Parameters");
+            var expected = VerifyCS.Diagnostic(TypeNameSuffixAnalyzer.DiagnosticId).WithSpan(3, 18, 3, 36).WithArguments("ResponseParameters", "Parameters");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
     }
