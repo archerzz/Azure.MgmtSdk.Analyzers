@@ -10,12 +10,12 @@ namespace Azure.MgmtSdk.Analyzers
     /// Analyzer to check type name suffixes. There are some suffixed we don't recommend to use, like `Result`, `Response`...
     /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class TypeNameSuffixAnalyzer : DiagnosticAnalyzer
+    public class ModelNameSuffix : DiagnosticAnalyzer
     {
         public const string DiagnosticId = "AZM0010";
 
-        private static readonly string Title = "Imroper type name suffix";
-        private static readonly string MessageFormat = "Type name '{0}' ends with '{1}'";
+        private static readonly string Title = "Imroper model name suffix";
+        private static readonly string MessageFormat = "Model name '{0}' ends with '{1}'";
         private static readonly string Description = "Suffix is not recommended. Consider to remove or modify.";
 
         private static readonly HashSet<string> ReservedNames = new HashSet<string> { "ErrorResponse" };
@@ -24,9 +24,8 @@ namespace Azure.MgmtSdk.Analyzers
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
             description: Description);
 
-        // TODO: add more problematic suffixes here
-        private static readonly Regex SuffixRegex = new Regex(".+(?<Suffix>(Results?)|(Requests?)|(Responses?)|(Parameters?)|(Options?))$");
-
+        // Model suffix forbidden
+        private static readonly Regex SuffixRegex = new Regex(".+(?<Suffix>(Results?)|(Requests?)|(Responses?)|(Parameters?)|(Options?)|(Collection)|(Resource))$");
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
@@ -53,5 +52,6 @@ namespace Azure.MgmtSdk.Analyzers
                 context.ReportDiagnostic(diagnostic);
             }
         }
+
     }
 }

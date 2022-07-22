@@ -1,13 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using VerifyCS = AzureMgmtSDKAnalyzer.Test.CSharpCodeFixVerifier<
-    Azure.MgmtSdk.Analyzers.TypeNameSuffixAnalyzer,
-    Azure.MgmtSdk.Analyzers.TypeNameSuffixCodeFixProvider>;
+    Azure.MgmtSdk.Analyzers.ModelNameSuffix,
+    Azure.MgmtSdk.Analyzers.ModelNameSuffixCodeFixProvider>;
 
 namespace Azure.MgmtSdk.Analyzers.Test
 {
     [TestClass]
-    public class TypeNameSuffixAnalyzerTests
+    public class ModelNameSuffixAnalyzerTests
     {
         [TestMethod]
         public async Task AZM0010NameEndWithResult()
@@ -21,7 +21,7 @@ class MonitorResult
         Console.WriteLine(""Hello, world!"");
     }
 }";
-            var expected = VerifyCS.Diagnostic(TypeNameSuffixAnalyzer.DiagnosticId).WithSpan(3, 7, 3, 20).WithArguments("MonitorResult", "Result");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffix.DiagnosticId).WithSpan(3, 7, 3, 20).WithArguments("MonitorResult", "Result");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
@@ -34,7 +34,7 @@ class MonitorResult
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(TypeNameSuffixAnalyzer.DiagnosticId).WithSpan(3, 28, 3, 73).WithArguments("ApplicationGatewayAvailableWafRuleSetsResults", "Results");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffix.DiagnosticId).WithSpan(3, 28, 3, 73).WithArguments("ApplicationGatewayAvailableWafRuleSetsResults", "Results");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
@@ -47,7 +47,7 @@ class MonitorResult
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(TypeNameSuffixAnalyzer.DiagnosticId).WithSpan(3, 18, 3, 36).WithArguments("ResponseParameters", "Parameters");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffix.DiagnosticId).WithSpan(3, 18, 3, 36).WithArguments("ResponseParameters", "Parameters");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
     }
