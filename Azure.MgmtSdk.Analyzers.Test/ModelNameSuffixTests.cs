@@ -7,7 +7,7 @@ using VerifyCS = AzureMgmtSDKAnalyzer.Test.CSharpCodeFixVerifier<
 namespace Azure.MgmtSdk.Analyzers.Test
 {
     [TestClass]
-    public class ModelNameSuffixAnalyzerTests
+    public class ModelNameSuffixTests
     {
         [TestMethod]
         public async Task AZM0010NameEndWithResult()
@@ -48,6 +48,22 @@ class MonitorResult
     }
 }";
             var expected = VerifyCS.Diagnostic(ModelNameSuffix.DiagnosticId).WithSpan(3, 18, 3, 36).WithArguments("ResponseParameters", "Parameters");
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [TestMethod]
+        public async Task AZM0010ClassResult()
+        {
+            var test = @"namespace ResponseParameters
+{
+    public class ResponseParameter
+    {
+        static void MainResponseParameter() {
+        
+        }
+    }
+}";
+            var expected = VerifyCS.Diagnostic(ModelNameSuffix.DiagnosticId).WithSpan(3, 18, 3, 35).WithArguments("ResponseParameter", "Parameter");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
     }

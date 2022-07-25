@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -24,6 +25,7 @@ namespace Azure.MgmtSdk.Analyzers
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
             description: Description);
 
+        private bool underModelsNamespace; // Judge if a "xxx.Models" namespace which define a Model.
         // Model suffix forbidden
         private static readonly Regex SuffixRegex = new Regex(".+(?<Suffix>(Results?)|(Requests?)|(Responses?)|(Parameters?)|(Options?)|(Collection)|(Resource))$");
 
@@ -33,16 +35,34 @@ namespace Azure.MgmtSdk.Analyzers
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.EnableConcurrentExecution();
-            context.RegisterSymbolAction(AnalyzeSuffix, SymbolKind.NamedType);
+            context.RegisterSyntaxNodeAction(SyntaxAnalyzeSuffix, SyntaxKind.ClassDeclaration);
+            context.RegisterSymbolAction(SymbolAnalyzeSuffix, SymbolKind.NamedType);
         }
 
-        private void AnalyzeSuffix(SymbolAnalysisContext context)
+        private void SyntaxAnalyzeSuffix(SyntaxNodeAnalysisContext context)
+        {
+            var classNode = context.Node;
+            var model = context.SemanticModel;
+            var classSymbol = model.GetDeclaredSymbol(classNode);
+            string fullNamespace = classSymbol.ContainingNamespace.Name;
+            if (fullNamespace.Contains("Models"))
+            {
+                underModelsNamespace = true;
+            }
+            else
+            {
+                underModelsNamespace = false;
+            }
+        }
+
+        private void SymbolAnalyzeSuffix(SymbolAnalysisContext context)
         {
             var name = context.Symbol.Name;
-            if (ReservedNames.Contains(name))
-            {
+            if (!underModelsNamespace || ReservedNames.Contains(name))
                 return;
-            }
+            //Compilation compilation = context.Compilation;
+            //INamedTypeSymbol typeSymbol = compilation.GetTypeByMetadataName(name);
+
             var match = SuffixRegex.Match(name);
             if (match.Success)
             {
@@ -52,6 +72,5 @@ namespace Azure.MgmtSdk.Analyzers
                 context.ReportDiagnostic(diagnostic);
             }
         }
-
     }
 }
