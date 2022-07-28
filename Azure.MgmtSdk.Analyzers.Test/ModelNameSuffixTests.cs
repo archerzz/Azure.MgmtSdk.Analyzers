@@ -10,7 +10,7 @@ namespace Azure.MgmtSdk.Analyzers.Test
     public class ModelNameSuffixTests
     {
         [TestMethod]
-        public async Task AZM0010NameEndWithResult()
+        public async Task AZM0010WithoutModels()
         {
             var test = @"using System;
 
@@ -21,14 +21,15 @@ class MonitorResult
         Console.WriteLine(""Hello, world!"");
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffix.DiagnosticId).WithSpan(3, 7, 3, 20).WithArguments("MonitorResult", "Result");
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+            //var expected = VerifyCS.Diagnostic(ModelNameSuffix.DiagnosticId).WithSpan(3, 7, 3, 20).WithArguments("MonitorResult", "Result");
+            //var expected = "None";
+            await VerifyCS.VerifyAnalyzerAsync(test); // Default No errors.
         }
 
         [TestMethod]
         public async Task AZM0010ApplicationGatewayResult()
         {
-            var test = @"namespace Test
+            var test = @"namespace Test.Models
 {
     internal partial class ApplicationGatewayAvailableWafRuleSetsResults
     {
@@ -41,7 +42,7 @@ class MonitorResult
         [TestMethod]
         public async Task AZM0010ResponseParameters()
         {
-            var test = @"namespace Test
+            var test = @"namespace Test.Models
 {
     public class ResponseParameters
     {
@@ -54,7 +55,7 @@ class MonitorResult
         [TestMethod]
         public async Task AZM0010ClassResult()
         {
-            var test = @"namespace ResponseParameters
+            var test = @"namespace ResponseTest.Models
 {
     public class ResponseParameter
     {
@@ -64,6 +65,25 @@ class MonitorResult
     }
 }";
             var expected = VerifyCS.Diagnostic(ModelNameSuffix.DiagnosticId).WithSpan(3, 18, 3, 35).WithArguments("ResponseParameter", "Parameter");
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [TestMethod]
+        public async Task AZM0010TwoNamespace()
+        {
+            var test = @"namespace NamespaceTest.Models
+{
+    namespace SubTest
+    {
+        public class ResponseParameter
+        {
+            static void MainResponseParameter() {
+        
+            }
+        }
+    }
+}";
+            var expected = VerifyCS.Diagnostic(ModelNameSuffix.DiagnosticId).WithSpan(5, 22, 5, 39).WithArguments("ResponseParameter", "Parameter");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
     }

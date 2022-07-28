@@ -39,25 +39,26 @@ namespace Azure.MgmtSdk.Analyzers
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(SyntaxAnalyzeSuffix, SyntaxKind.ClassDeclaration);
-            context.RegisterSymbolAction(AnalyzeSuffixConditionOne, SymbolKind.NamedType);
-            context.RegisterSymbolAction(AnalyzeSuffixConditionTwo, SymbolKind.NamedType);
+            //context.RegisterSyntaxNodeAction(SyntaxAnalyzeSuffix, SyntaxKind.ClassDeclaration);
+            //context.RegisterSymbolAction(AnalyzeSuffixConditionOne, SymbolKind.NamedType);
+            //context.RegisterSymbolAction(AnalyzeSuffixConditionTwo, SymbolKind.NamedType);
+            //context.RegisterSymbolAction(AnalyzeSuffixConditionThree, SymbolKind.NamedType);
         }
-        private void SyntaxAnalyzeSuffix(SyntaxNodeAnalysisContext context)
-        {
-            var classNode = context.Node;
-            var model = context.SemanticModel;
-            var classSymbol = model.GetDeclaredSymbol(classNode);
-            string fullNamespace = classSymbol.ContainingNamespace.Name;
-            if (fullNamespace.Contains("Models"))
-            {
-                underModelsNamespace = true;
-            }
-            else
-            {
-                underModelsNamespace = false;
-            }
-        }
+        //private void SyntaxAnalyzeSuffix(SyntaxNodeAnalysisContext context)
+        //{
+        //    var classNode = context.Node;
+        //    var model = context.SemanticModel;
+        //    var classSymbol = model.GetDeclaredSymbol(classNode);
+        //    string fullNamespace = classSymbol.ContainingNamespace.Name;
+        //    if (fullNamespace.Contains("Models"))
+        //    {
+        //        underModelsNamespace = true;
+        //    }
+        //    else
+        //    {
+        //        underModelsNamespace = false;
+        //    }
+        //}
 
         public static bool DerivesFromOrImplementsAnyConstructionOf(INamedTypeSymbol type, INamedTypeSymbol parentType)
         {
@@ -81,8 +82,8 @@ namespace Azure.MgmtSdk.Analyzers
 
         private void AnalyzeSuffixConditionOne(SymbolAnalysisContext context)
         {
-            if (!underModelsNamespace)
-                return;
+            //if (!underModelsNamespace)
+                //return;
             var name = context.Symbol.Name;
             Compilation compilation = context.Compilation;
             INamedTypeSymbol typeSymbol = compilation.GetTypeByMetadataName(name);
@@ -141,5 +142,26 @@ namespace Azure.MgmtSdk.Analyzers
             }
         }
 
+        private void AnalyzeSuffixConditionThree(SymbolAnalysisContext context)
+        {
+            if (!underModelsNamespace)
+                return;
+            var name = context.Symbol.Name;
+            Compilation compilation = context.Compilation;
+            INamedTypeSymbol typeSymbol = compilation.GetTypeByMetadataName(name);
+            INamedTypeSymbol parentTypeSymbol = compilation.GetTypeByMetadataName("Operation<T>");
+
+            if (DerivesFromOrImplementsAnyConstructionOf(typeSymbol, parentTypeSymbol))
+                return;
+
+            var match = SuffixRegexConditionOne.Match(name);
+            if (match.Success)
+            {
+                var suffix = match.Groups["Suffix"].Value;
+                var diagnostic = Diagnostic.Create(Rule, context.Symbol.Locations[0],
+                    new Dictionary<string, string> { { "SuggestedName", name.Substring(0, name.Length - suffix.Length) } }.ToImmutableDictionary(), name, suffix);
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
     }
 }
