@@ -49,16 +49,9 @@ namespace Azure.MgmtSdk.Analyzers
             if (typeSymbol.TypeKind != TypeKind.Class) // We just check classes.
                 return;
 
-            //var namespaceSymbolA = typeSymbol.ContainingNamespace;
-            //Console.WriteLine("{0}{1}{2}", "Symbol namespaceSymbol: ", namespaceSymbolA, namespaceSymbolA.GetType());
             bool hasNamespaceModels = false;
-
-            //if (namespaceSymbolA.ToString().EndsWith("Models"))
-            //    hasNamespaceModels = true;
-
             for (var namespaceSymbol = typeSymbol.ContainingNamespace; namespaceSymbol != null; namespaceSymbol = namespaceSymbol.ContainingNamespace)
             {
-                //Console.WriteLine("{0}{1}", "Symbol namespaceSymbol: ", namespaceSymbol.GetType());
                 var fullNamespace = namespaceSymbol.Name;
                 if (fullNamespace.Contains("Models"))
                 {
@@ -66,12 +59,9 @@ namespace Azure.MgmtSdk.Analyzers
                     break;
                 }
             }
-
-            // Console.WriteLine("{0}{1}", "Symbol hasNamespaceModels: ", hasNamespaceModels);
             if (!hasNamespaceModels)
                 return;
 
-            //Console.WriteLine("{0}{1}", "final name: ", name);
             var match = SuffixRegex.Match(name);
             if (match.Success)
             {

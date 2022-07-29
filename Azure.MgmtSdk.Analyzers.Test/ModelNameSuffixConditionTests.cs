@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using VerifyCS = AzureMgmtSDKAnalyzer.Test.CSharpCodeFixVerifier<
-    Azure.MgmtSdk.Analyzers.ModelNameSuffix,
+    Azure.MgmtSdk.Analyzers.ModelNameSuffixCondition,
     Azure.MgmtSdk.Analyzers.ModelNameSuffixCodeFixProvider>;
 
 namespace Azure.MgmtSdk.Analyzers.Test
@@ -10,17 +10,38 @@ namespace Azure.MgmtSdk.Analyzers.Test
     public class ModelNameSuffixConditionTests
     {
         [TestMethod]
-        public async Task AZM0010NameEndWithResult()
+        public async Task AZM0011PartialClassDefinition()
         {
-            var test = @"namespace Azure.ResourceManager.Network.Models
+            var test = @"
+namespace Azure.ResourceManager.Network.Models
 {
-    public partial class AadAuthenticationParameters : IUtf8JsonSerializable
+    public partial class AadAuthenticationDefinition
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffix.DiagnosticId).WithSpan(3, 26, 3, 53).WithArguments("MonitorParameters", "Parameters");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixCondition.DiagnosticId).WithSpan(4, 26, 4, 53).WithArguments("AadAuthenticationDefinition", "Definition");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
+        [TestMethod]
+        public async Task AZM0011DefinitionInherit()
+        {
+            var test = @"
+namespace Azure.ResourceManager.Network.Models
+{
+    public class ArmResource {
+        protected int width;
+        protected int height;
+    }
+    public partial class AadAuthenticationDefinition: ArmResource
+    {
+      public int getArea()
+      {
+         return (width * height);
+      }
+    }
+}";
+            await VerifyCS.VerifyAnalyzerAsync(test); // Default No errors.
+        }
     }
 }

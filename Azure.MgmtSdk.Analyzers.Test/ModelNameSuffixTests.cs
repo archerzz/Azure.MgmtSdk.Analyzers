@@ -21,8 +21,6 @@ class MonitorResult
         Console.WriteLine(""Hello, world!"");
     }
 }";
-            //var expected = VerifyCS.Diagnostic(ModelNameSuffix.DiagnosticId).WithSpan(3, 7, 3, 20).WithArguments("MonitorResult", "Result");
-            //var expected = "None";
             await VerifyCS.VerifyAnalyzerAsync(test); // Default No errors.
         }
 
