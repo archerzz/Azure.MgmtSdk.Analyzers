@@ -139,8 +139,6 @@ namespace Azure.MgmtSdk.Analyzers
             var match = SuffixRegexConditionThree.Match(name);
             if (match.Success)
             {
-                //Console.WriteLine("{0}{1}", "name: ", name);
-                //Console.WriteLine("{0}{1}", "typeSymbol: ", typeSymbol.ToString());
                 if (typeSymbol.ToString().EndsWith("<T>")) // if it is a template, continue
                     return;
 
