@@ -39,8 +39,8 @@ namespace Azure.MgmtSdk.Analyzers
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.EnableConcurrentExecution();
             context.RegisterSymbolAction(AnalyzeSuffixConditionOne, SymbolKind.NamedType);
-            //context.RegisterSymbolAction(AnalyzeSuffixConditionTwo, SymbolKind.NamedType);
-            //context.RegisterSymbolAction(AnalyzeSuffixConditionThree, SymbolKind.NamedType);
+            context.RegisterSymbolAction(AnalyzeSuffixConditionTwo, SymbolKind.NamedType);
+            context.RegisterSymbolAction(AnalyzeSuffixConditionThree, SymbolKind.NamedType);
         }
 
 
@@ -69,27 +69,26 @@ namespace Azure.MgmtSdk.Analyzers
             if (typeSymbol.TypeKind != TypeKind.Class) // We just check classes.
                 return;
 
-            bool hasNamespaceModels = false;
-            for (var namespaceSymbol = typeSymbol.ContainingNamespace; namespaceSymbol != null; namespaceSymbol = namespaceSymbol.ContainingNamespace)
-            {
-                var fullNamespace = namespaceSymbol.Name;
-                if (fullNamespace.Contains("Models"))
-                {
-                    hasNamespaceModels = true;
-                    break;
-                }
-            }
-            if (!hasNamespaceModels)
-                return;
-
-            if (ImplementsInterfaceOrBaseClass(typeSymbol, "ArmResource"))
-                return;
-
             var match = SuffixRegexConditionOne.Match(name);
             if (match.Success)
             {
+                bool hasNamespaceModels = false;
+                for (var namespaceSymbol = typeSymbol.ContainingNamespace; namespaceSymbol != null; namespaceSymbol = namespaceSymbol.ContainingNamespace)
+                {
+                    var fullNamespace = namespaceSymbol.Name;
+                    if (fullNamespace.Contains("Models"))
+                    {
+                        hasNamespaceModels = true;
+                        break;
+                    }
+                }
+                if (!hasNamespaceModels)
+                    return;
+
+                if (ImplementsInterfaceOrBaseClass(typeSymbol, "ArmResource"))
+                    return;
+
                 var suffix = match.Groups["Suffix"].Value;
-                Console.WriteLine("{0}{1}", "matchedSuffix: ", suffix);
                 var diagnostic = Diagnostic.Create(Rule, context.Symbol.Locations[0],
                     new Dictionary<string, string> { { "SuggestedName", name.Substring(0, name.Length - suffix.Length) } }.ToImmutableDictionary(), name, suffix);
                 context.ReportDiagnostic(diagnostic);
@@ -99,31 +98,30 @@ namespace Azure.MgmtSdk.Analyzers
         private void AnalyzeSuffixConditionTwo(SymbolAnalysisContext context)
         {
             var name = context.Symbol.Name;
-            //var typeSymbol = (INamedTypeSymbol)context.Symbol;
-            //if (typeSymbol.ToString() == "ResourceData" || typeSymbol.ToString() == "TrackedResourceData")
-            //    return;
-            //Compilation compilation = context.Compilation;
-            //INamedTypeSymbol typeSymbol = compilation.GetTypeByMetadataName(name);
-            //Console.WriteLine("typeSymbol: ", typeSymbol);
-            //if (typeSymbol.ToString() == "ResourceData" || typeSymbol.ToString() == "TrackedResourceData")
-            //    return;
-
-            //while (typeSymbol.BaseType != null)
-            //{
-            //    typeSymbol = typeSymbol.BaseType;
-            //    if (typeSymbol.ToString() == "ResourceData" || typeSymbol.ToString() == "TrackedResourceData")
-            //    {
-            //        return;
-            //    }
-            //}
-            Compilation compilation = context.Compilation;
-            INamedTypeSymbol typeSymbol = compilation.GetTypeByMetadataName(name);
-            INamedTypeSymbol parentTypeSymbolOne = compilation.GetTypeByMetadataName("ResourceData");
-            INamedTypeSymbol parentTypeSymbolTwo = compilation.GetTypeByMetadataName("TrackedResourceData");
+            
+            var typeSymbol = (INamedTypeSymbol)context.Symbol;
+            if (typeSymbol.TypeKind != TypeKind.Class) // We just check classes.
+                return;
 
             var match = SuffixRegexConditionTwo.Match(name);
             if (match.Success)
             {
+                bool hasNamespaceModels = false;
+                for (var namespaceSymbol = typeSymbol.ContainingNamespace; namespaceSymbol != null; namespaceSymbol = namespaceSymbol.ContainingNamespace)
+                {
+                    var fullNamespace = namespaceSymbol.Name;
+                    if (fullNamespace.Contains("Models"))
+                    {
+                        hasNamespaceModels = true;
+                        break;
+                    }
+                }
+                if (!hasNamespaceModels)
+                    return;
+
+                if (ImplementsInterfaceOrBaseClass(typeSymbol, "ResourceData") || ImplementsInterfaceOrBaseClass(typeSymbol, "TrackedResourceData"))
+                    return;
+
                 var suffix = match.Groups["Suffix"].Value;
                 var diagnostic = Diagnostic.Create(Rule, context.Symbol.Locations[0],
                     new Dictionary<string, string> { { "SuggestedName", name.Substring(0, name.Length - suffix.Length) } }.ToImmutableDictionary(), name, suffix);
@@ -134,14 +132,34 @@ namespace Azure.MgmtSdk.Analyzers
         private void AnalyzeSuffixConditionThree(SymbolAnalysisContext context)
         {
             var name = context.Symbol.Name;
-            Compilation compilation = context.Compilation;
-            INamedTypeSymbol typeSymbol = compilation.GetTypeByMetadataName(name);
-            INamedTypeSymbol parentTypeSymbol = compilation.GetTypeByMetadataName("Operation<T>");
+            var typeSymbol = (INamedTypeSymbol)context.Symbol;
+            if (typeSymbol.TypeKind != TypeKind.Class) // We just check classes.
+                return;
 
-
-            var match = SuffixRegexConditionOne.Match(name);
+            var match = SuffixRegexConditionThree.Match(name);
             if (match.Success)
             {
+                //Console.WriteLine("{0}{1}", "name: ", name);
+                //Console.WriteLine("{0}{1}", "typeSymbol: ", typeSymbol.ToString());
+                if (typeSymbol.ToString().EndsWith("<T>")) // if it is a template, continue
+                    return;
+
+                bool hasNamespaceModels = false;
+                for (var namespaceSymbol = typeSymbol.ContainingNamespace; namespaceSymbol != null; namespaceSymbol = namespaceSymbol.ContainingNamespace)
+                {
+                    var fullNamespace = namespaceSymbol.Name;
+                    if (fullNamespace.Contains("Models"))
+                    {
+                        hasNamespaceModels = true;
+                        break;
+                    }
+                }
+                if (!hasNamespaceModels)
+                    return;
+
+                if (ImplementsInterfaceOrBaseClass(typeSymbol, "Operation<T>"))
+                    return;
+
                 var suffix = match.Groups["Suffix"].Value;
                 var diagnostic = Diagnostic.Create(Rule, context.Symbol.Locations[0],
                     new Dictionary<string, string> { { "SuggestedName", name.Substring(0, name.Length - suffix.Length) } }.ToImmutableDictionary(), name, suffix);
