@@ -14,13 +14,13 @@ namespace Azure.MgmtSdk.Analyzers
     /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
 
-    public class ModelNameSuffixSimpleAnalyzer : ModelNameSuffixAnalyzerBase
+    public class ModelNameSuffixGeneralAnalyzer : ModelNameSuffixAnalyzerBase
     {
-        public const string DiagnosticIdSimple = "AZM0010C0";
+        public const string DiagnosticIdGeneral = "AZM0010";
 
         private static readonly HashSet<string> ReservedNames = new HashSet<string> { "ErrorResponse" };
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdSimple, Title,
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdGeneral, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
             description: Description);
 
@@ -62,7 +62,7 @@ namespace Azure.MgmtSdk.Analyzers
 
     public class ModelNameSuffixDefinitionAnalyzer : ModelNameSuffixAnalyzerBase
     {
-        public const string DiagnosticIdDefinition = "AZM0010C1";
+        public const string DiagnosticIdDefinition = "AZM0011";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdDefinition, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
@@ -106,7 +106,7 @@ namespace Azure.MgmtSdk.Analyzers
     }
     public class ModelNameSuffixDataAnalyzer : ModelNameSuffixAnalyzerBase
     {
-        public const string DiagnosticIdData = "AZM0010C2";
+        public const string DiagnosticIdData = "AZM0012";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdData, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
@@ -151,7 +151,7 @@ namespace Azure.MgmtSdk.Analyzers
 
     public class ModelNameSuffixOperationAnalyzer : ModelNameSuffixAnalyzerBase
     {
-        public const string DiagnosticIdOperation = "AZM0010C3";
+        public const string DiagnosticIdOperation = "AZM0013";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdOperation, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
