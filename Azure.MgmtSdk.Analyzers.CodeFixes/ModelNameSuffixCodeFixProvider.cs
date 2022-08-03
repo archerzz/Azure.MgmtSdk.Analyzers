@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace Azure.MgmtSdk.Analyzers
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(TypeNameSuffixCodeFixProvider)), Shared]
-    public class TypeNameSuffixCodeFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(ModelNameSuffixCodeFixProvider)), Shared]
+    public class ModelNameSuffixCodeFixProvider : CodeFixProvider
     {
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
-            get { return ImmutableArray.Create(TypeNameSuffixAnalyzer.DiagnosticId); }
+            get { return ImmutableArray.Create(ModelNameSuffixGeneralAnalyzer.DiagnosticIdGeneral); }
         }
 
         public sealed override FixAllProvider GetFixAllProvider()
@@ -32,7 +32,7 @@ namespace Azure.MgmtSdk.Analyzers
                 CodeAction.Create(
                     title: "Rename type",
                     createChangedDocument: c => InsertAutorestDirectiveInCommentsAsync(context.Document, diagnostic, c),
-                    equivalenceKey: nameof(TypeNameSuffixCodeFixProvider)),
+                    equivalenceKey: nameof(ModelNameSuffixCodeFixProvider)),
                 diagnostic);
 
             return Task.CompletedTask;
