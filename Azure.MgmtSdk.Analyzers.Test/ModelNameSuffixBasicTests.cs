@@ -1,16 +1,16 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using VerifyCS = AzureMgmtSDKAnalyzer.Test.CSharpCodeFixVerifier<
-    Azure.MgmtSdk.Analyzers.ModelNameSuffix,
+    Azure.MgmtSdk.Analyzers.ModelNameSuffixBasicAnalyzer,
     Azure.MgmtSdk.Analyzers.ModelNameSuffixCodeFixProvider>;
 
 namespace Azure.MgmtSdk.Analyzers.Test
 {
     [TestClass]
-    public class ModelNameSuffixTests
+    public class ModelNameSuffixBasicTests
     {
         [TestMethod]
-        public async Task AZM0010WithoutModels()
+        public async Task AZM0010C0WithoutModels()
         {
             var test = @"using System;
 
@@ -25,7 +25,7 @@ class MonitorResult
         }
 
         [TestMethod]
-        public async Task AZM0010ApplicationGatewayResult()
+        public async Task AZM0010C0ApplicationGatewayResult()
         {
             var test = @"namespace Test.Models
 {
@@ -33,12 +33,12 @@ class MonitorResult
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffix.DiagnosticId).WithSpan(3, 28, 3, 73).WithArguments("ApplicationGatewayAvailableWafRuleSetsResults", "Results");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixBasicAnalyzer.DiagnosticIdBase).WithSpan(3, 28, 3, 73).WithArguments("ApplicationGatewayAvailableWafRuleSetsResults", "Results");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
         [TestMethod]
-        public async Task AZM0010ResponseParameters()
+        public async Task AZM0010C0ResponseParameters()
         {
             var test = @"namespace Test.Models
 {
@@ -46,12 +46,12 @@ class MonitorResult
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffix.DiagnosticId).WithSpan(3, 18, 3, 36).WithArguments("ResponseParameters", "Parameters");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixBasicAnalyzer.DiagnosticIdBase).WithSpan(3, 18, 3, 36).WithArguments("ResponseParameters", "Parameters");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
         [TestMethod]
-        public async Task AZM0010ClassResult()
+        public async Task AZM0010C0ClassResult()
         {
             var test = @"namespace ResponseTest.Models
 {
@@ -62,12 +62,12 @@ class MonitorResult
         }
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffix.DiagnosticId).WithSpan(3, 18, 3, 35).WithArguments("ResponseParameter", "Parameter");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixBasicAnalyzer.DiagnosticIdBase).WithSpan(3, 18, 3, 35).WithArguments("ResponseParameter", "Parameter");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
         [TestMethod]
-        public async Task AZM0010TwoNamespace()
+        public async Task AZM0010C0TwoNamespace()
         {
             var test = @"namespace NamespaceTest.Models
 {
@@ -81,7 +81,7 @@ class MonitorResult
         }
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffix.DiagnosticId).WithSpan(5, 22, 5, 39).WithArguments("ResponseParameter", "Parameter");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixBasicAnalyzer.DiagnosticIdBase).WithSpan(5, 22, 5, 39).WithArguments("ResponseParameter", "Parameter");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
     }

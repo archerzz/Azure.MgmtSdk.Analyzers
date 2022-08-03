@@ -12,43 +12,39 @@ namespace Azure.MgmtSdk.Analyzers
     /// Analyzer to check type name suffixes. There are some suffixed we don't recommend to use, like `Result`, `Response`...
     /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ModelNameSuffix : DiagnosticAnalyzer
+    public class ModelNameSuffixAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "AZM0010";
+        public const string DiagnosticIdBase = "AZM0010";
 
-        private static readonly string Title = "Imroper model name suffix";
-        private static readonly string MessageFormat = "Model name '{0}' ends with '{1}'";
-        private static readonly string Description = "Suffix is not recommended. Consider to remove or modify.";
+        protected static readonly string Title = "Imroper model name suffix";
+        protected static readonly string MessageFormat = "Model name '{0}' ends with '{1}'";
+        protected static readonly string Description = "Suffix is not recommended. Consider to remove or modify.";
 
-        private static readonly HashSet<string> ReservedNames = new HashSet<string> { "ErrorResponse" };
-
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title,
-            MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
+        public static DiagnosticDescriptor AZM0010 = new DiagnosticDescriptor(
+            nameof(AZM0010),
+            Title,
+            MessageFormat, 
+            DiagnosticCategory.Naming, 
+            DiagnosticSeverity.Warning, 
+            isEnabledByDefault: true,
             description: Description);
-
-        public bool underModelsNamespace; // Judge if a "xxx.Models" namespace which define a Model.
-        // Model suffix forbidden
-        private static readonly Regex SuffixRegex = new Regex(".+(?<Suffix>(Results?)|(Requests?)|(Responses?)|(Parameters?)|(Options?)|(Collection)|(Resource))$");
-
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(AZM0010); } }
 
         public override void Initialize(AnalysisContext context)
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.EnableConcurrentExecution();
-            context.RegisterSymbolAction(SymbolAnalyzeSuffix, SymbolKind.NamedType);
         }
 
-        private void SymbolAnalyzeSuffix(SymbolAnalysisContext context)
+        protected bool IsClass(INamedTypeSymbol typeSymbol)
         {
-            var name = context.Symbol.Name; 
-            if (ReservedNames.Contains(name))
-                return;
+            if (typeSymbol.TypeKind != TypeKind.Class)
+                return false;
+            return true;
+        }
 
-            var typeSymbol = (INamedTypeSymbol)context.Symbol;
-            if (typeSymbol.TypeKind != TypeKind.Class) // We just check classes.
-                return;
-
+        protected bool HasModelsNamespace(INamedTypeSymbol typeSymbol)
+        {
             bool hasNamespaceModels = false;
             for (var namespaceSymbol = typeSymbol.ContainingNamespace; namespaceSymbol != null; namespaceSymbol = namespaceSymbol.ContainingNamespace)
             {
@@ -59,12 +55,72 @@ namespace Azure.MgmtSdk.Analyzers
                     break;
                 }
             }
-            if (!hasNamespaceModels)
+            return hasNamespaceModels;
+        }
+        protected bool ImplementsInterfaceOrBaseClass(INamedTypeSymbol typeSymbol, string nameToCheck)
+        {
+            if (typeSymbol == null)
+                return false;
+
+            // judge base classes
+            if (typeSymbol.MetadataName == nameToCheck)
+                return true;
+
+            INamedTypeSymbol tempSymbol = typeSymbol;
+            while (tempSymbol.BaseType != null)
+            {
+                tempSymbol = tempSymbol.BaseType;
+                if (tempSymbol.MetadataName == nameToCheck)
+                    return true;
+            }
+
+            // judge interfaces
+            foreach (var @interface in typeSymbol.AllInterfaces)
+                if (@interface.MetadataName == nameToCheck)
+                    return true;
+
+            return false;
+        }
+    }
+
+    public class ModelNameSuffixBasicAnalyzer : ModelNameSuffixAnalyzer
+    {
+        public const string DiagnosticIdBasic = DiagnosticIdBase + "C0";
+
+        private static readonly HashSet<string> ReservedNames = new HashSet<string> { "ErrorResponse" };
+
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdBase, Title,
+            MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
+            description: Description);
+
+        // Model suffix forbidden
+        private static readonly Regex SuffixRegex = new Regex(".+(?<Suffix>(Results?)|(Requests?)|(Responses?)|(Parameters?)|(Options?)|(Collection)|(Resource))$");
+
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
+
+        public override void Initialize(AnalysisContext context)
+        {
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
+            context.EnableConcurrentExecution();
+            context.RegisterSymbolAction(SymbolAnalyzeSuffixBaisc, SymbolKind.NamedType);
+        }
+
+        private void SymbolAnalyzeSuffixBaisc(SymbolAnalysisContext context)
+        {
+            var name = context.Symbol.Name;
+            if (ReservedNames.Contains(name))
                 return;
 
             var match = SuffixRegex.Match(name);
             if (match.Success)
             {
+                var typeSymbol = (INamedTypeSymbol)context.Symbol;
+                if (!IsClass(typeSymbol))
+                    return;
+
+                if (!HasModelsNamespace(typeSymbol))
+                    return;
+
                 var suffix = match.Groups["Suffix"].Value;
                 var diagnostic = Diagnostic.Create(Rule, context.Symbol.Locations[0],
                     new Dictionary<string, string> { { "SuggestedName", name.Substring(0, name.Length - suffix.Length) } }.ToImmutableDictionary(), name, suffix);
