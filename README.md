@@ -3,7 +3,6 @@ Analyzers for Azure .NET Management SDK
 
 ## Use Tutorials
 
-<<<<<<< HEAD
 ### Using Project Reference
 Take NetworkFunction as an example.
 1. Open ".\src\Azure.ResourceManager.NetworkFunction.csproj", add three lines before the end of "Project" tag. Remember to replace "{your_path}" by your local project path.
@@ -15,8 +14,6 @@ Take NetworkFunction as an example.
 2. Command `dotnet build` in command line or use `Build` in Visual Studio to finish the SDK Generation process.
 
 
-=======
->>>>>>> e7cdca13b88fe3c294f0c899c3c3fa9ad93d8175
 ### Using Nuget Package
 #### Nuget Package
 1. Use Visual Studio to open the "Azure.MgmtSdk.Analyzers.sln", build the total solution.
@@ -33,14 +30,3 @@ Take NetworkFunction as an example.
   </ItemGroup>
 ```
 5. Command `dotnet clean; dotnet build` in command line to clean previous settings and finish the SDK Generation process.
-<<<<<<< HEAD
-=======
-
-### Using Project Reference
-1. Open ".\src\Azure.ResourceManager.NetworkFunction.csproj", add three lines before the end of "Project" tag. Remember to replace "{your_path}" by your local project path.
-```
-  <ProjectReference Include="{your_path}\Azure.MgmtSdk.Analyzers\Azure.MgmtSdk.Analyzers\Azure.MgmtSdk.Analyzers.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" OutputItemType="Analyzer"/>
-  </ItemGroup>
-```
-2. Command `dotnet build` in command line or use `Build` in Visual Studio to finish the SDK Generation process.
->>>>>>> e7cdca13b88fe3c294f0c899c3c3fa9ad93d8175

@@ -1,13 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using VerifyCS = AzureMgmtSDKAnalyzer.Test.CSharpCodeFixVerifier<
-    Azure.MgmtSdk.Analyzers.ModelNameSuffixBasicAnalyzer,
+    Azure.MgmtSdk.Analyzers.ModelNameSuffixSimpleAnalyzer,
     Azure.MgmtSdk.Analyzers.ModelNameSuffixCodeFixProvider>;
 
 namespace Azure.MgmtSdk.Analyzers.Test
 {
     [TestClass]
-    public class ModelNameSuffixBasicTests
+    public class ModelNameSuffixSimpleTests
     {
         [TestMethod]
         public async Task AZM0010C0WithoutModels()
@@ -33,7 +33,7 @@ class MonitorResult
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixBasicAnalyzer.DiagnosticIdBase).WithSpan(3, 28, 3, 73).WithArguments("ApplicationGatewayAvailableWafRuleSetsResults", "Results");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixSimpleAnalyzer.DiagnosticIdSimple).WithSpan(3, 28, 3, 73).WithArguments("ApplicationGatewayAvailableWafRuleSetsResults", "Results");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
@@ -46,7 +46,7 @@ class MonitorResult
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixBasicAnalyzer.DiagnosticIdBase).WithSpan(3, 18, 3, 36).WithArguments("ResponseParameters", "Parameters");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixSimpleAnalyzer.DiagnosticIdSimple).WithSpan(3, 18, 3, 36).WithArguments("ResponseParameters", "Parameters");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
@@ -62,7 +62,7 @@ class MonitorResult
         }
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixBasicAnalyzer.DiagnosticIdBase).WithSpan(3, 18, 3, 35).WithArguments("ResponseParameter", "Parameter");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixSimpleAnalyzer.DiagnosticIdSimple).WithSpan(3, 18, 3, 35).WithArguments("ResponseParameter", "Parameter");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
@@ -81,7 +81,7 @@ class MonitorResult
         }
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixBasicAnalyzer.DiagnosticIdBase).WithSpan(5, 22, 5, 39).WithArguments("ResponseParameter", "Parameter");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixSimpleAnalyzer.DiagnosticIdSimple).WithSpan(5, 22, 5, 39).WithArguments("ResponseParameter", "Parameter");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
     }

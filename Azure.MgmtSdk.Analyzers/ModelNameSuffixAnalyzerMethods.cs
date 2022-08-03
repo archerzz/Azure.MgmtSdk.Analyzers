@@ -10,12 +10,59 @@ using System.ComponentModel;
 namespace Azure.MgmtSdk.Analyzers
 {
     /// <summary>
-    /// Analyzer to check type name suffixes. There are some suffixed we don't recommend to use, like `Result`, `Response`...
+    /// Analyzer to check type name suffixes. This file contains some methods that deal with different conditions.
     /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class ModelNameSuffixDefinitionAnalyzer : ModelNameSuffixAnalyzer
+
+    public class ModelNameSuffixSimpleAnalyzer : ModelNameSuffixAnalyzerBase
     {
-        public const string DiagnosticIdDefinition = DiagnosticIdBase + "C1";
+        public const string DiagnosticIdSimple = "AZM0010C0";
+
+        private static readonly HashSet<string> ReservedNames = new HashSet<string> { "ErrorResponse" };
+
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdSimple, Title,
+            MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
+            description: Description);
+
+        // Model suffix forbidden
+        private static readonly Regex SuffixRegex = new Regex(".+(?<Suffix>(Results?)|(Requests?)|(Responses?)|(Parameters?)|(Options?)|(Collection)|(Resource))$");
+
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
+
+        public override void Initialize(AnalysisContext context)
+        {
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
+            context.EnableConcurrentExecution();
+            context.RegisterSymbolAction(SymbolAnalyzeSuffixBaisc, SymbolKind.NamedType);
+        }
+
+        private void SymbolAnalyzeSuffixBaisc(SymbolAnalysisContext context)
+        {
+            var name = context.Symbol.Name;
+            if (ReservedNames.Contains(name))
+                return;
+
+            var match = SuffixRegex.Match(name);
+            if (match.Success)
+            {
+                var typeSymbol = (INamedTypeSymbol)context.Symbol;
+                if (!IsClass(typeSymbol))
+                    return;
+
+                if (!HasModelsNamespace(typeSymbol))
+                    return;
+
+                var suffix = match.Groups["Suffix"].Value;
+                var diagnostic = Diagnostic.Create(Rule, context.Symbol.Locations[0],
+                    new Dictionary<string, string> { { "SuggestedName", name.Substring(0, name.Length - suffix.Length) } }.ToImmutableDictionary(), name, suffix);
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
+    }
+
+    public class ModelNameSuffixDefinitionAnalyzer : ModelNameSuffixAnalyzerBase
+    {
+        public const string DiagnosticIdDefinition = "AZM0010C1";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdDefinition, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
@@ -24,7 +71,7 @@ namespace Azure.MgmtSdk.Analyzers
         // ConditionDefinition: Avoid using Definition as model suffix unless it's the name of a Resource
         private static readonly Regex SuffixRegexConditionDefinition = new Regex(".+(?<Suffix>(Definition?))$");
 
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
         public override void Initialize(AnalysisContext context)
         {
@@ -57,17 +104,16 @@ namespace Azure.MgmtSdk.Analyzers
             }
         }
     }
-    public class ModelNameSuffixDataAnalyzer : ModelNameSuffixAnalyzer
+    public class ModelNameSuffixDataAnalyzer : ModelNameSuffixAnalyzerBase
     {
-        public const string DiagnosticIdData = DiagnosticIdBase + "C2";
+        public const string DiagnosticIdData = "AZM0010C2";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdData, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
             description: Description);
 
-        //ConditionData: Avoid using Data as model suffix unless the model derives from ResourceData/TrackedResourceData
+        // ConditionData: Avoid using Data as model suffix unless the model derives from ResourceData/TrackedResourceData
         private static readonly Regex SuffixRegexConditionData = new Regex(".+(?<Suffix>(Data))$");
-
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
@@ -103,16 +149,16 @@ namespace Azure.MgmtSdk.Analyzers
         }
     }
 
-    public class ModelNameSuffixOperationAnalyzer : ModelNameSuffixAnalyzer
+    public class ModelNameSuffixOperationAnalyzer : ModelNameSuffixAnalyzerBase
     {
-        public const string DiagnosticIdOperation = DiagnosticIdBase + "C3";
+        public const string DiagnosticIdOperation = "AZM0010C3";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdOperation, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
             description: Description);
 
 
-        //ConditionOperation: Avoid using Operation as model suffix unless the model derives from Operation<T>
+        // ConditionOperation: Avoid using Operation as model suffix unless the model derives from Operation<T>
         private static readonly Regex SuffixRegexConditionOperation = new Regex(".+(?<Suffix>(Operation))$");
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
