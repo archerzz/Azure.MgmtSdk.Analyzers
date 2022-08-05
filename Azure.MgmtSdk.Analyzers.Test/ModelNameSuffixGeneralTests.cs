@@ -25,19 +25,6 @@ class MonitorResult
         }
 
         [TestMethod]
-        public async Task AZM0010C0ApplicationGatewayResult()
-        {
-            var test = @"namespace Test.Models
-{
-    internal partial class ApplicationGatewayAvailableWafRuleSetsResults
-    {
-    }
-}";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixGeneralAnalyzer.DiagnosticIdGeneral).WithSpan(3, 28, 3, 73).WithArguments("ApplicationGatewayAvailableWafRuleSetsResults", "Results");
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
-        }
-
-        [TestMethod]
         public async Task AZM0010C0ResponseParameters()
         {
             var test = @"namespace Test.Models
