@@ -10,7 +10,7 @@ namespace Azure.MgmtSdk.Analyzers.Test
     public class ModelNameSuffixGeneralTests
     {
         [TestMethod]
-        public async Task AZM0010C0WithoutModels()
+        public async Task AZM0010WithoutModels()
         {
             var test = @"using System;
 
@@ -25,7 +25,7 @@ class MonitorResult
         }
 
         [TestMethod]
-        public async Task AZM0010C0ResponseParameters()
+        public async Task AZM0010ResponseParameters()
         {
             var test = @"namespace Test.Models
 {
@@ -38,7 +38,7 @@ class MonitorResult
         }
 
         [TestMethod]
-        public async Task AZM0010C0ClassResult()
+        public async Task AZM0010ClassResult()
         {
             var test = @"namespace ResponseTest.Models
 {
@@ -54,7 +54,7 @@ class MonitorResult
         }
 
         [TestMethod]
-        public async Task AZM0010C0TwoNamespace()
+        public async Task AZM0010TwoNamespace()
         {
             var test = @"namespace NamespaceTest.Models
 {

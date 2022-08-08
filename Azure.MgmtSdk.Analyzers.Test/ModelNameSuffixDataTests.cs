@@ -14,7 +14,7 @@ namespace Azure.MgmtSdk.Analyzers.Test
     public class ModelNameSuffixConditionDataTests
     {
         [TestMethod]
-        public async Task AZM0010C2DataNoModels()
+        public async Task AZM0012DataNoModels()
         {
             var test = @"
 namespace Azure.ResourceManager.Network.Temp
@@ -29,7 +29,7 @@ namespace Azure.ResourceManager.Network.Temp
         }
 
         [TestMethod]
-        public async Task AZM0010C2DataWithModels()
+        public async Task AZM0012DataWithModels()
         {
             var test = @"
 namespace Azure.ResourceManager.Network.Models
@@ -45,7 +45,7 @@ namespace Azure.ResourceManager.Network.Models
         }
 
         [TestMethod]
-        public async Task AZM0010C2DataBaseTrackedResourceData()
+        public async Task AZM0012DataBaseTrackedResourceData()
         {
             var test = @"
 namespace Azure.ResourceManager.Network.Models
