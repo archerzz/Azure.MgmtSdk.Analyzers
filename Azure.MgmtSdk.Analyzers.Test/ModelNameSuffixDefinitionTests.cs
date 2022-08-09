@@ -14,7 +14,7 @@ namespace Azure.MgmtSdk.Analyzers.Test
     public class ModelNameSuffixDefinitionTests
     {
         [TestMethod]
-        public async Task AZM0010C1PartialClassDefinition()
+        public async Task AZM0011PartialClassDefinition()
         {
             var test = @"
 namespace Azure.ResourceManager.Network.Models
@@ -28,7 +28,7 @@ namespace Azure.ResourceManager.Network.Models
         }
 
         [TestMethod]
-        public async Task AZM0010C1DefinitionInherit()
+        public async Task AZM0011DefinitionInherit()
         {
             var test = @"
 namespace Azure.ResourceManager.Network.Models

@@ -14,7 +14,7 @@ namespace Azure.MgmtSdk.Analyzers.Test
     public class ModelNameSuffixOperationTests
     {
         [TestMethod]
-        public async Task AZM0010C3OperationTemplate()
+        public async Task AZM0013OperationTemplate()
         {
             var test = @"
 namespace Azure.ResourceManager.Network.Models
@@ -30,7 +30,7 @@ namespace Azure.ResourceManager.Network.Models
         }
 
         [TestMethod]
-        public async Task AZM0010C3Operation()
+        public async Task AZM0013Operation()
         {
             var test = @"
 namespace Azure.ResourceManager.Network.Models
