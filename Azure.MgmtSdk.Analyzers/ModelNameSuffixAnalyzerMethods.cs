@@ -25,7 +25,7 @@ namespace Azure.MgmtSdk.Analyzers
             description: Description);
 
         // Model suffix forbidden
-        private static readonly Regex SuffixRegex = new Regex(".+(?<Suffix>(Results?)|(Requests?)|(Responses?)|(Parameters?)|(Options?)|(Collection)|(Resource))$");
+        private static readonly Regex SuffixRegex = new Regex(".+(?<Suffix>(Requests?)|(Responses?)|(Parameters?)|(Options?)|(Collection))$");
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
@@ -104,6 +104,7 @@ namespace Azure.MgmtSdk.Analyzers
             }
         }
     }
+
     public class ModelNameSuffixDataAnalyzer : ModelNameSuffixAnalyzerBase
     {
         public const string DiagnosticIdData = "AZM0012";
@@ -188,6 +189,52 @@ namespace Azure.MgmtSdk.Analyzers
                     return;
 
                 if (ImplementsInterfaceOrBaseClass(typeSymbol, "Operation<T>"))
+                    return;
+
+                var suffix = match.Groups["Suffix"].Value;
+                var diagnostic = Diagnostic.Create(Rule, context.Symbol.Locations[0],
+                    new Dictionary<string, string> { { "SuggestedName", name.Substring(0, name.Length - suffix.Length) } }.ToImmutableDictionary(), name, suffix);
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
+    }
+
+    public class ModelNameSuffixResourceAnalyzer : ModelNameSuffixAnalyzerBase
+    {
+        public const string DiagnosticIdResource = "AZM0014";
+
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdResource, Title,
+            MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
+            description: Description);
+
+        // ConditionResource: Avoid using Resource as model suffix unless it's the name of GenericResource, PrivateLinkServiceResource, etc.
+        private static readonly Regex SuffixRegexConditionResource = new Regex(".+(?<Suffix>(Resource))$");
+        //private static readonly HashSet<string> ReservedResourceNames = new HashSet<string> { "GenericResource", "PrivateLinkServiceResource" };
+
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
+
+        public override void Initialize(AnalysisContext context)
+        {
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
+            context.EnableConcurrentExecution();
+            context.RegisterSymbolAction(AnalyzeSuffixConditionResource, SymbolKind.NamedType);
+        }
+
+        private void AnalyzeSuffixConditionResource(SymbolAnalysisContext context)
+        {
+            var name = context.Symbol.Name;
+            var match = SuffixRegexConditionResource.Match(name);
+
+            //if (ReservedResourceNames.Contains(name))
+            //    return;
+
+            if (match.Success)
+            {
+                var typeSymbol = (INamedTypeSymbol)context.Symbol;
+                if (!IsClass(typeSymbol))
+                    return;
+
+                if (!HasModelsNamespace(typeSymbol))
                     return;
 
                 var suffix = match.Groups["Suffix"].Value;
