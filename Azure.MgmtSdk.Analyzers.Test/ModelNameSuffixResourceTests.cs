@@ -37,16 +37,5 @@ class MonitorResult
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
-        [TestMethod]
-        public async Task AZM0014GenericResource()
-        {
-            var test = @"namespace Test.Models
-{
-    public class GenericResource
-    {
-    }
-}";
-            await VerifyCS.VerifyAnalyzerAsync(test); // Default No errors.
-        }
     }
 }
