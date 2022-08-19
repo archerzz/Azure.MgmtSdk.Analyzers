@@ -209,7 +209,7 @@ namespace Azure.MgmtSdk.Analyzers
 
         // ConditionResource: Avoid using Resource as model suffix unless it's the name of GenericResource, PrivateLinkServiceResource, etc.
         private static readonly Regex SuffixRegexConditionResource = new Regex(".+(?<Suffix>(Resource))$");
-        //private static readonly HashSet<string> ReservedResourceNames = new HashSet<string> { "GenericResource", "PrivateLinkServiceResource" };
+        private static readonly HashSet<string> ReservedResourceNames = new HashSet<string> { "GenericResource", "PrivateLinkServiceResource" };
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
@@ -225,8 +225,8 @@ namespace Azure.MgmtSdk.Analyzers
             var name = context.Symbol.Name;
             var match = SuffixRegexConditionResource.Match(name);
 
-            //if (ReservedResourceNames.Contains(name))
-            //    return;
+            if (ReservedResourceNames.Contains(name))
+                return;
 
             if (match.Success)
             {

@@ -14,7 +14,7 @@ namespace Azure.MgmtSdk.Analyzers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ModelNameSuffixAnalyzerBase : DiagnosticAnalyzer
     {
-        protected static readonly string Title = "Imroper model name suffix";
+        protected static readonly string Title = "Improper model name suffix";
         protected static readonly string MessageFormat = "Model name '{0}' ends with '{1}'";
         protected static readonly string Description = "Suffix is not recommended. Consider to remove or modify.";
 
