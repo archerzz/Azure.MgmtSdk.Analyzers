@@ -48,5 +48,17 @@ class MonitorResult
 }";
             await VerifyCS.VerifyAnalyzerAsync(test); // Default No errors.
         }
+
+        [TestMethod]
+        public async Task AZM0014PrivateLinkServiceResource()
+        {
+            var test = @"namespace Test.Models
+{
+    public class PrivateLinkServiceResource
+    {
+    }
+}";
+            await VerifyCS.VerifyAnalyzerAsync(test); // Default No errors.
+        }
     }
 }

@@ -30,3 +30,28 @@ Take NetworkFunction as an example.
   </ItemGroup>
 ```
 5. Command `dotnet clean; dotnet build` in command line to clean previous settings and finish the SDK Generation process.
+
+
+## Rules
+
+### Finished
+- [x] Avoid using Parameter(s), Request, Options and Response as the suffix in model.
+- [x] Avoid using reserved names Collection, Resource as model suffix. Avoid using Data as model suffix unless the model derives from ResourceData/TrackedResourceData. 
+- [x] Avoid using Definition as model suffix unless it's the name of a Resource. 
+- [x] Avoid using Operation as model suffix unless the model derives from Operation<T>.
+
+### TODO
+1. Property with type bool should start with a verb, like 'Is', 'Can', 'Has' prefix.
+2. The data type of a property should be 'uuid' if its name is end of 'Id' / 'Guid' and value is really a uuid. 
+3. The data type of a property should be 'ResourceIdentifier' if its name is end of 'Id' and value is really a ResourceIdentifier. 
+4. The data type of a property should be 'ResouceType' if its name is 'ResourceType' or end with 'Type' and the value is really a ResourceType('Microsoft.xxxxx/xxxx'). 
+5. The data type of a property should be 'ETag' if its name is 'etag' and the value is really a ETag. The property name  should be 'ETag'(Optional). 
+6. The data type of a property might be 'AzureLocation' if its name is end with 'location' / 'locations' . 
+7. For all `CheckNameAvailability` operation:
+  The method name should be `Check[Resource/RP name]NameAvailability`
+  The parameter / response model name should be `[Resource/RP name]NameAvailabilityXXX`
+
+8. roperty/parameter usually ends with 'On'. It's auto-renamed by the generator, but watch out for exceptions.  
+  Special case, 'start' and 'end' use root form, that are 'startOn' and 'endOn', others usually use past tense, like 'CreatedOn', 'EstablishedOn'
+
+
