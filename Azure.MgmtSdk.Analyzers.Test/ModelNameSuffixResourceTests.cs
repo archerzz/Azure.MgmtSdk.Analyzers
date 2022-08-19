@@ -46,8 +46,7 @@ class MonitorResult
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixResourceAnalyzer.DiagnosticIdResource).WithSpan(3, 18, 3, 33).WithArguments("GenericResource", "Resource");
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+            await VerifyCS.VerifyAnalyzerAsync(test); // Default No errors.
         }
     }
 }
