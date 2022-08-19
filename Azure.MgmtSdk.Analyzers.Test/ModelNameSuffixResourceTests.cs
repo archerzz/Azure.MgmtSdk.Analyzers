@@ -37,5 +37,17 @@ class MonitorResult
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
+        [TestMethod]
+        public async Task AZM0014GenericResource()
+        {
+            var test = @"namespace Test.Models
+{
+    public class GenericResource
+    {
+    }
+}";
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixResourceAnalyzer.DiagnosticIdResource).WithSpan(3, 18, 3, 33).WithArguments("GenericResource", "Resource");
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+        }
     }
 }
