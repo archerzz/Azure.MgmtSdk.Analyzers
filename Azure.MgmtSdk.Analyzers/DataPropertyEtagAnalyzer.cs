@@ -15,9 +15,9 @@ namespace Azure.MgmtSdk.Analyzers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class DataPropertyEtagAnalyzer : DiagnosticAnalyzer
     {
-        protected static readonly string Title = "Improper public data property";
-        protected static readonly string MessageFormat = "The data type of a property name '{0}' is '{1}'.";
-        protected static readonly string Description = "Consider to change it to Etag.";
+        protected static readonly string Title = "Potential improper data type of propert";
+        protected static readonly string MessageFormat = "Property {0} looks like an ETag.";
+        protected static readonly string Description = "Check the real return value and consider changing the type to \"ETag\".";
 
         public const string DiagnosticId = "AZM0043";
 
@@ -73,7 +73,7 @@ namespace Azure.MgmtSdk.Analyzers
                     return;
 
                 var diagnostic = Diagnostic.Create(Rule, context.ContainingSymbol.Locations[0],
-                    new Dictionary<string, string> { { "SuggestedName", variableName.Substring(0, variableName.Length) } }.ToImmutableDictionary(), variableName, variableType.ToString());
+                    new Dictionary<string, string> { { "SuggestedName", variableName.Substring(0, variableName.Length) } }.ToImmutableDictionary(), variableName);
                 context.ReportDiagnostic(diagnostic);
             }
         }

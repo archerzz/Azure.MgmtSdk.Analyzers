@@ -15,9 +15,9 @@ namespace Azure.MgmtSdk.Analyzers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class DataPropertyResourceIdentifierAnalyzer : DiagnosticAnalyzer
     {
-        protected static readonly string Title = "Improper public data property";
-        protected static readonly string MessageFormat = "The data type of a property name '{0}' is '{1}'.";
-        protected static readonly string Description = "Consider to change it to ResourceIdentifier.";
+        protected static readonly string Title = "Potential improper data type of propert";
+        protected static readonly string MessageFormat = "Property {0} looks like a ResourceIdentifier.";
+        protected static readonly string Description = "Check the real return value and consider changing the type to \"ResourceIdentifier\".";
 
         public const string DiagnosticId = "AZM0041";
 
