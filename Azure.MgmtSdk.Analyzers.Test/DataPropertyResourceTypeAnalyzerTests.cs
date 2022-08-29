@@ -35,7 +35,7 @@ namespace Azure.ResourceManager.Network
         public string ResourceType { get; set; }
     }
 }";
-            var expected = VerifyCS.Diagnostic(DataPropertyResourceTypeAnalyzer.DiagnosticIdDataPropertyResourceTypeName).WithSpan(5, 23, 5, 35).WithArguments("ResourceType", "string");
+            var expected = VerifyCS.Diagnostic(DataPropertyResourceTypeAnalyzer.DiagnosticId).WithSpan(5, 23, 5, 35).WithArguments("ResourceType", "string");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
@@ -49,7 +49,7 @@ namespace Azure.ResourceManager.Network
         public static readonly string ResourceType;    
     }
 }";
-            var expected = VerifyCS.Diagnostic(DataPropertyResourceTypeAnalyzer.DiagnosticIdDataPropertyResourceTypeName).WithSpan(5, 39, 5, 51).WithArguments("ResourceType", "string");
+            var expected = VerifyCS.Diagnostic(DataPropertyResourceTypeAnalyzer.DiagnosticId).WithSpan(5, 39, 5, 51).WithArguments("ResourceType", "string");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
     }

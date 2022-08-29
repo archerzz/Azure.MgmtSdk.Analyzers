@@ -19,9 +19,9 @@ namespace Azure.MgmtSdk.Analyzers
         protected static readonly string MessageFormat = "The data type of a property name '{0}' is '{1}'.";
         protected static readonly string Description = "Consider to change it to ResourceIdentifier.";
 
-        public const string DiagnosticIdDataPropertyResourceIdentifierName = "AZM0041";
+        public const string DiagnosticId = "AZM0041";
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdDataPropertyResourceIdentifierName, Title,
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
             description: Description);
 

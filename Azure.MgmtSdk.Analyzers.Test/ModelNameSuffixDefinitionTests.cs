@@ -23,7 +23,7 @@ namespace Azure.ResourceManager.Network.Models
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixDefinitionAnalyzer.DiagnosticIdDefinition).WithSpan(4, 26, 4, 53).WithArguments("AadAuthenticationDefinition", "Definition");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixDefinitionAnalyzer.DiagnosticId).WithSpan(4, 26, 4, 53).WithArguments("AadAuthenticationDefinition", "Definition");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 

@@ -33,7 +33,7 @@ class MonitorResult
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixGeneralAnalyzer.DiagnosticIdGeneral).WithSpan(3, 18, 3, 36).WithArguments("ResponseParameters", "Parameters");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixGeneralAnalyzer.DiagnosticId).WithSpan(3, 18, 3, 36).WithArguments("ResponseParameters", "Parameters");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
@@ -49,7 +49,7 @@ class MonitorResult
         }
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixGeneralAnalyzer.DiagnosticIdGeneral).WithSpan(3, 18, 3, 35).WithArguments("ResponseParameter", "Parameter");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixGeneralAnalyzer.DiagnosticId).WithSpan(3, 18, 3, 35).WithArguments("ResponseParameter", "Parameter");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
@@ -68,7 +68,7 @@ class MonitorResult
         }
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixGeneralAnalyzer.DiagnosticIdGeneral).WithSpan(5, 22, 5, 39).WithArguments("ResponseParameter", "Parameter");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixGeneralAnalyzer.DiagnosticId).WithSpan(5, 22, 5, 39).WithArguments("ResponseParameter", "Parameter");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
     }

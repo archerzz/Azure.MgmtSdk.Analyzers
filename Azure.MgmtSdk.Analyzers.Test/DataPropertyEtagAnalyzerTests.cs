@@ -36,7 +36,7 @@ namespace Azure.MgmtSdk.Analyzers.Test
         public string Etag { get; set; }
     }
 }";
-            var expected = VerifyCS.Diagnostic(DataPropertyEtagAnalyzer.DiagnosticIdDataPropertyETagName).WithSpan(5, 23, 5, 27).WithArguments("Etag", "string");
+            var expected = VerifyCS.Diagnostic(DataPropertyEtagAnalyzer.DiagnosticId).WithSpan(5, 23, 5, 27).WithArguments("Etag", "string");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
@@ -50,7 +50,7 @@ namespace Azure.MgmtSdk.Analyzers.Test
         public static readonly string Etag;    
     }
 }";
-            var expected = VerifyCS.Diagnostic(DataPropertyEtagAnalyzer.DiagnosticIdDataPropertyETagName).WithSpan(5, 39, 5, 43).WithArguments("Etag", "string");
+            var expected = VerifyCS.Diagnostic(DataPropertyEtagAnalyzer.DiagnosticId).WithSpan(5, 39, 5, 43).WithArguments("Etag", "string");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
     }

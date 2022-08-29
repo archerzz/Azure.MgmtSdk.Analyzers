@@ -16,7 +16,7 @@ namespace Azure.MgmtSdk.Analyzers
     {
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
-            get { return ImmutableArray.Create(ModelNameSuffixGeneralAnalyzer.DiagnosticIdGeneral); }
+            get { return ImmutableArray.Create(ModelNameSuffixGeneralAnalyzer.DiagnosticId); }
         }
 
         public sealed override FixAllProvider GetFixAllProvider()

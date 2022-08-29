@@ -42,7 +42,7 @@ namespace Azure.ResourceManager.Network.Models
     {
     }
 }";
-            DiagnosticResult[] expected = { VerifyCS.Diagnostic(ModelNameSuffixOperationAnalyzer.DiagnosticIdOperation).WithSpan(4, 18, 4, 30).WithArguments("ArmOperation", "Operation"), VerifyCS.Diagnostic(ModelNameSuffixOperationAnalyzer.DiagnosticIdOperation).WithSpan(7, 20, 7, 35).WithArguments("DnsArmOperation", "Operation") };
+            DiagnosticResult[] expected = { VerifyCS.Diagnostic(ModelNameSuffixOperationAnalyzer.DiagnosticId).WithSpan(4, 18, 4, 30).WithArguments("ArmOperation", "Operation"), VerifyCS.Diagnostic(ModelNameSuffixOperationAnalyzer.DiagnosticId).WithSpan(7, 20, 7, 35).WithArguments("DnsArmOperation", "Operation") };
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
     }

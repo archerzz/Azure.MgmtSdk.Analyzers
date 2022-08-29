@@ -35,7 +35,7 @@ namespace Azure.ResourceManager.Network
         public string DefaultOriginGroupId { get; set; }
     }
 }";
-            var expected = VerifyCS.Diagnostic(DataPropertyResourceIdentifierAnalyzer.DiagnosticIdDataPropertyResourceIdentifierName).WithSpan(5, 23, 5, 43).WithArguments("DefaultOriginGroupId", "string");
+            var expected = VerifyCS.Diagnostic(DataPropertyResourceIdentifierAnalyzer.DiagnosticId).WithSpan(5, 23, 5, 43).WithArguments("DefaultOriginGroupId", "string");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
@@ -49,7 +49,7 @@ namespace Azure.ResourceManager.Network
         public static readonly string DefaultOriginGroupId; 
     }
 }";
-            var expected = VerifyCS.Diagnostic(DataPropertyResourceIdentifierAnalyzer.DiagnosticIdDataPropertyResourceIdentifierName).WithSpan(5, 39, 5, 59).WithArguments("DefaultOriginGroupId", "string");
+            var expected = VerifyCS.Diagnostic(DataPropertyResourceIdentifierAnalyzer.DiagnosticId).WithSpan(5, 39, 5, 59).WithArguments("DefaultOriginGroupId", "string");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
     }

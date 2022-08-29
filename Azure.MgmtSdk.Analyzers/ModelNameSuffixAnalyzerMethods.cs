@@ -16,11 +16,11 @@ namespace Azure.MgmtSdk.Analyzers
 
     public class ModelNameSuffixGeneralAnalyzer : ModelNameSuffixAnalyzerBase
     {
-        public const string DiagnosticIdGeneral = "AZM0010";
+        public const string DiagnosticId = "AZM0010";
 
         private static readonly HashSet<string> ReservedNames = new HashSet<string> { "ErrorResponse" };
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdGeneral, Title,
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
             description: Description);
 
@@ -62,9 +62,9 @@ namespace Azure.MgmtSdk.Analyzers
 
     public class ModelNameSuffixDefinitionAnalyzer : ModelNameSuffixAnalyzerBase
     {
-        public const string DiagnosticIdDefinition = "AZM0011";
+        public const string DiagnosticId = "AZM0011";
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdDefinition, Title,
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
             description: Description);
 
@@ -107,9 +107,9 @@ namespace Azure.MgmtSdk.Analyzers
 
     public class ModelNameSuffixDataAnalyzer : ModelNameSuffixAnalyzerBase
     {
-        public const string DiagnosticIdData = "AZM0012";
+        public const string DiagnosticId = "AZM0012";
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdData, Title,
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
             description: Description);
 
@@ -152,9 +152,9 @@ namespace Azure.MgmtSdk.Analyzers
 
     public class ModelNameSuffixOperationAnalyzer : ModelNameSuffixAnalyzerBase
     {
-        public const string DiagnosticIdOperation = "AZM0013";
+        public const string DiagnosticId = "AZM0013";
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdOperation, Title,
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
             description: Description);
 
@@ -201,9 +201,9 @@ namespace Azure.MgmtSdk.Analyzers
 
     public class ModelNameSuffixResourceAnalyzer : ModelNameSuffixAnalyzerBase
     {
-        public const string DiagnosticIdResource = "AZM0014";
+        public const string DiagnosticId = "AZM0014";
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdResource, Title,
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
             description: Description);
 

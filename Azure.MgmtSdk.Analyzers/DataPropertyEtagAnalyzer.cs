@@ -19,13 +19,13 @@ namespace Azure.MgmtSdk.Analyzers
         protected static readonly string MessageFormat = "The data type of a property name '{0}' is '{1}'.";
         protected static readonly string Description = "Consider to change it to Etag.";
 
-        public const string DiagnosticIdDataPropertyETagName = "AZM0043";
+        public const string DiagnosticId = "AZM0043";
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdDataPropertyETagName, Title,
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
             description: Description);
 
-        private static readonly Regex suffixRegex = new Regex(".+(?<Suffix>([Ee][Tt]ag))$");
+        private static readonly Regex suffixRegex = new Regex(".+(?<Suffix>(E[Tt]ag))$");
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
