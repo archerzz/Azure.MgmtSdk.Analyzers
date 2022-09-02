@@ -13,20 +13,18 @@ namespace Azure.MgmtSdk.Analyzers
     /// Analyzer to check resource type 'ResourceIdentifier'.
     /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class DataPropertyResourceIdentifierAnalyzer : DiagnosticAnalyzer
+    public class DataPropertyResourceIdentifierAnalyzer : DataPropertyAnalyzerBase
     {
-        protected static readonly string Title = "Potential improper data type of propert";
-        protected static readonly string MessageFormat = "Property {0} looks like a ResourceIdentifier.";
-        protected static readonly string Description = "Check the real return value and consider changing the type to \"ResourceIdentifier\".";
-
         public const string DiagnosticId = "AZM0041";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Info, isEnabledByDefault: true,
             description: Description);
 
-        private static readonly Regex suffixRegex = new Regex(".+(?<Suffix>(Id))$");
+        private static readonly Regex suffixRegex = new Regex("ResourceIdentifier");
 
+        protected static List<string> targetName = new List<string> { };
+        protected static List<string> targetType = new List<string> { "ResourceIdentifier", "ResourceIdentifier?", "Azure.Core.ResourceIdentifier", "Azure.Core.ResourceIdentifier?" };
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
         public override void Initialize(AnalysisContext context)
@@ -41,38 +39,16 @@ namespace Azure.MgmtSdk.Analyzers
         {
             VariableDeclarationSyntax node = (VariableDeclarationSyntax)context.Node;
             var variableName = node.Variables.ToString();
-            var variableType = node.Type;
-
-            var match = suffixRegex.Match(variableName);
-
-            if (match.Success)
-            {
-                if (variableType.ToString().Contains("ResourceIdentifier")) // ResourceIdentifier and Azure.Core.ResourceIdentifier
-                    return;
-
-                var diagnostic = Diagnostic.Create(Rule, context.ContainingSymbol.Locations[0],
-                    new Dictionary<string, string> { { "SuggestedName", variableName.Substring(0, variableName.Length) } }.ToImmutableDictionary(), variableName, variableType.ToString());
-                context.ReportDiagnostic(diagnostic);
-            }
+            var variableType = node.Type.ToString();
+            MatchAndDiagnostic(suffixRegex, variableName, variableType, targetName, targetType, Rule, context);
         }
 
         private void SyntaxAnalyzeDataPropertyResourceIdentifierPropertyName(SyntaxNodeAnalysisContext context)
         {
             PropertyDeclarationSyntax node = (PropertyDeclarationSyntax)context.Node;
             var variableName = node.Identifier.ToString();
-            var variableType = node.Type;
-
-            var match = suffixRegex.Match(variableName);
-
-            if (match.Success)
-            {
-                if (variableType.ToString().Contains("ResourceIdentifier")) // ResourceIdentifier and Azure.Core.ResourceIdentifier
-                    return;
-
-                var diagnostic = Diagnostic.Create(Rule, context.ContainingSymbol.Locations[0],
-                    new Dictionary<string, string> { { "SuggestedName", variableName.Substring(0, variableName.Length) } }.ToImmutableDictionary(), variableName);
-                context.ReportDiagnostic(diagnostic);
-            }
+            var variableType = node.Type.ToString();
+            MatchAndDiagnostic(suffixRegex, variableName, variableType, targetName, targetType, Rule, context);
         }
 
     }

@@ -9,9 +9,9 @@ namespace Azure.MgmtSdk.Analyzers.Test
     public class DataPropertyResourceIdentifierAnalyzerTests
     {
         [TestMethod]
-        public async Task AZM0041DataPropertyResourceIdentifierCorrectPropertyType()
+        public async Task ValidCases()
         {
-            var test = @"
+            var test1 = @"
 namespace Azure.ResourceManager.Network
 {
     public class ResourceIdentifier
@@ -22,35 +22,28 @@ namespace Azure.ResourceManager.Network
         public ResourceIdentifier DefaultOriginGroupId { get; set; }
     }
 }";
-            await VerifyCS.VerifyAnalyzerAsync(test); // Default No errors.
+            await VerifyCS.VerifyAnalyzerAsync(test1); 
         }
 
         [TestMethod]
-        public async Task AZM0041DataPropertyResourceIdentifierIncorrectPropertyType()
+        public async Task ErrorCases()
         {
-            var test = @"namespace Azure.ResourceManager.Network
+            var test1 = @"namespace Azure.ResourceManager.Network
 {
     public partial class Test
     {
-        public string DefaultOriginGroupId { get; set; }
+        public string DefaultOriginGroupResourceIdentifier { get; set; }
     }
 }";
-            var expected = VerifyCS.Diagnostic(DataPropertyResourceIdentifierAnalyzer.DiagnosticId).WithSpan(5, 23, 5, 43).WithArguments("DefaultOriginGroupId", "string");
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
-        }
-
-        [TestMethod]
-        public async Task AZM0041DataPropertyResourceIdentifierIncorrectVariableType()
-        {
-            var test = @"namespace Azure.ResourceManager.Network
+            var test2 = @"namespace Azure.ResourceManager.Network
 {
     public partial class Test
     {
-        public static readonly string DefaultOriginGroupId; 
+        public static readonly string DefaultOriginGroupResourceIdentifier; 
     }
 }";
-            var expected = VerifyCS.Diagnostic(DataPropertyResourceIdentifierAnalyzer.DiagnosticId).WithSpan(5, 39, 5, 59).WithArguments("DefaultOriginGroupId", "string");
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+            await VerifyCS.VerifyAnalyzerAsync(test1, VerifyCS.Diagnostic(DataPropertyResourceIdentifierAnalyzer.DiagnosticId).WithSpan(5, 23, 5, 59).WithArguments("DefaultOriginGroupResourceIdentifier", "string"));
+            await VerifyCS.VerifyAnalyzerAsync(test2, VerifyCS.Diagnostic(DataPropertyResourceIdentifierAnalyzer.DiagnosticId).WithSpan(5, 39, 5, 75).WithArguments("DefaultOriginGroupResourceIdentifier", "string"));
         }
     }
 }

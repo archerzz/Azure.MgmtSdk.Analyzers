@@ -37,7 +37,6 @@ namespace Azure.MgmtSdk.Analyzers.Test
     }
 }";
             await VerifyCS.VerifyAnalyzerAsync(test1, VerifyCS.Diagnostic(DataPropertyEtagAnalyzer.DiagnosticId).WithSpan(5, 23, 5, 27).WithArguments("Etag", "string"));
-            //await VerifyCS.VerifyAnalyzerAsync(test2, VerifyCS.Diagnostic(DataPropertyEtagAnalyzer.DiagnosticId).WithSpan(5, 39, 5, 43).WithArguments("Etag", "string"));
         }
 
     }

@@ -41,21 +41,6 @@ namespace Azure.MgmtSdk.Analyzers
             var variableName = node.Variables.ToString();
             var variableType = node.Type.ToString();
             MatchAndDiagnostic(suffixRegex, variableName, variableType, targetName, targetType, Rule, context);
-
-            //var match = suffixRegex.Match(variableName);
-
-            //Console.WriteLine(variableType.ToString());
-
-            //if (match.Success || variableName == "Etag")
-            //{
-            //    if (variableType.ToString().Contains("ETag") || variableType.ToString().Contains("etag"))
-            //        return;
-
-            //    var diagnostic = Diagnostic.Create(Rule, context.ContainingSymbol.Locations[0],
-            //        new Dictionary<string, string> { { "SuggestedName", variableName.Substring(0, variableName.Length) } }.ToImmutableDictionary(), variableName, variableType.ToString());
-            //    context.ReportDiagnostic(diagnostic);
-            //}
-
         }
 
         private void SyntaxAnalyzeDataPropertyEtagPropertyName(SyntaxNodeAnalysisContext context)
@@ -64,18 +49,6 @@ namespace Azure.MgmtSdk.Analyzers
             var variableName = node.Identifier.ToString();
             var variableType = node.Type.ToString();
             MatchAndDiagnostic(suffixRegex, variableName, variableType, targetName, targetType, Rule, context);
-
-            //var match = suffixRegex.Match(variableName);
-
-            //if (match.Success || variableName == "Etag")
-            //{
-            //    if (variableType.ToString().Contains("ETag") || variableType.ToString().Contains("etag"))
-            //        return;
-
-            //    var diagnostic = Diagnostic.Create(Rule, context.ContainingSymbol.Locations[0], variableName);
-            //        //new Dictionary<string, string> { { "SuggestedName", variableName.Substring(0, variableName.Length) } }.ToImmutableDictionary(), variableName);
-            //    context.ReportDiagnostic(diagnostic);
-            //}
         }
 
     }
