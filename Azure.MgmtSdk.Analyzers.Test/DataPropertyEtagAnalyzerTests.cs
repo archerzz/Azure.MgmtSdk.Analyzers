@@ -9,9 +9,9 @@ namespace Azure.MgmtSdk.Analyzers.Test
     public class DataPropertyEtagTests
     {
         [TestMethod]
-        public async Task AZM0043DataPropertyEtagCorrectVariableType()
+        public async Task ValidCases()
         {
-            var test = @"namespace Azure.ResourceManager.Network
+            var test1 = @"namespace Azure.ResourceManager.Network
 {
     public partial class Test
     {
@@ -23,35 +23,22 @@ namespace Azure.MgmtSdk.Analyzers.Test
 #nullable disable
     }
 }";
-            await VerifyCS.VerifyAnalyzerAsync(test); // Default No errors.
+            await VerifyCS.VerifyAnalyzerAsync(test1);
         }
 
         [TestMethod]
-        public async Task AZM0043DataPropertyEtagInCorrectPropertyType()
+        public async Task ErrorCases()
         {
-            var test = @"namespace Azure.ResourceManager.Network
+            var test1 = @"namespace Azure.ResourceManager.Network
 {
     public partial class Test
     {
         public string Etag { get; set; }
     }
 }";
-            var expected = VerifyCS.Diagnostic(DataPropertyEtagAnalyzer.DiagnosticId).WithSpan(5, 23, 5, 27).WithArguments("Etag", "string");
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+            await VerifyCS.VerifyAnalyzerAsync(test1, VerifyCS.Diagnostic(DataPropertyEtagAnalyzer.DiagnosticId).WithSpan(5, 23, 5, 27).WithArguments("Etag", "string"));
+            //await VerifyCS.VerifyAnalyzerAsync(test2, VerifyCS.Diagnostic(DataPropertyEtagAnalyzer.DiagnosticId).WithSpan(5, 39, 5, 43).WithArguments("Etag", "string"));
         }
 
-        [TestMethod]
-        public async Task AZM0043DataPropertyEtagIncorrectVariableType()
-        {
-            var test = @"namespace Azure.ResourceManager.Network
-{
-    public partial class Test
-    {
-        public static readonly string Etag;    
-    }
-}";
-            var expected = VerifyCS.Diagnostic(DataPropertyEtagAnalyzer.DiagnosticId).WithSpan(5, 39, 5, 43).WithArguments("Etag", "string");
-            await VerifyCS.VerifyAnalyzerAsync(test, expected);
-        }
     }
 }

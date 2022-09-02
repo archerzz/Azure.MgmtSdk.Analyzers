@@ -22,7 +22,7 @@ namespace Azure.MgmtSdk.Analyzers
         public const string DiagnosticId = "AZM0042";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title,
-            MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
+            MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Info, isEnabledByDefault: true,
             description: Description);
 
         private static readonly Regex suffixRegex = new Regex(".+(?<Suffix>(Type))$");
@@ -70,7 +70,7 @@ namespace Azure.MgmtSdk.Analyzers
                     return;
 
                 var diagnostic = Diagnostic.Create(Rule, context.ContainingSymbol.Locations[0],
-                    new Dictionary<string, string> { { "SuggestedName", variableName.Substring(0, variableName.Length) } }.ToImmutableDictionary(), variableName, variableType.ToString());
+                    new Dictionary<string, string> { { "SuggestedName", variableName.Substring(0, variableName.Length) } }.ToImmutableDictionary(), variableName);
                 context.ReportDiagnostic(diagnostic);
             }
         }
