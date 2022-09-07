@@ -40,7 +40,7 @@ namespace Azure.ResourceManager.Network.Models
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixDataAnalyzer.DiagnosticIdData).WithSpan(6, 26, 6, 47).WithArguments("AadAuthenticationData", "Data");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixDataAnalyzer.DiagnosticId).WithSpan(6, 26, 6, 47).WithArguments("AadAuthenticationData", "Data");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 

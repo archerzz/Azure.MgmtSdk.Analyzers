@@ -19,9 +19,9 @@ namespace Azure.MgmtSdk.Analyzers
         protected static readonly string MessageFormat = "Property name '{0}' ends with '{1}'";
         protected static readonly string Description = "PropertyName is not recommended. Consider to add a verb as prefix.";
 
-        public const string DiagnosticIdPublicBoolPropertyName = "AZM0020";
+        public const string DiagnosticId = "AZM0020";
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticIdPublicBoolPropertyName, Title,
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
             description: Description);
 
