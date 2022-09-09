@@ -28,14 +28,15 @@ namespace Azure.MgmtSdk.Analyzers
             context.EnableConcurrentExecution();
         }
 
-        protected void MatchAndDiagnostic(Regex suffixRegex, string variableName, string variableType, List<string> targetName, List<string> targetType, DiagnosticDescriptor Rule, SyntaxNodeAnalysisContext context)
+        protected void MatchAndDiagnostic(Regex suffixRegex, string variableName, string variableType, List<string> targetName, List<string> targetType, DiagnosticDescriptor Rule, SyntaxNodeAnalysisContext context, List<string> checkType = null)
         {
             var match = suffixRegex.Match(variableName);
             
-
             if (match.Success || targetName.Exists(item => item == variableName))
             {
                 if (targetType.Exists(item => item == variableType))
+                    return;
+                if (checkType != null && !checkType.Exists(item => item == variableType))
                     return;
 
                 var diagnostic = Diagnostic.Create(Rule, context.ContainingSymbol.Locations[0], variableName, variableType);
