@@ -33,7 +33,7 @@ class MonitorResult
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixResourceAnalyzer.DiagnosticIdResource).WithSpan(3, 18, 3, 30).WithArguments("TestResource", "Resource");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixResourceAnalyzer.DiagnosticId).WithSpan(3, 18, 3, 30).WithArguments("TestResource", "Resource");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 

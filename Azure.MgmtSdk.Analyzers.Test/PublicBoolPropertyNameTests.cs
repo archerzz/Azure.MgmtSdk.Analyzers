@@ -31,7 +31,7 @@ namespace Azure.MgmtSdk.Analyzers.Test
         public bool? Fips { get; set; }
     }
 }";
-            var expected = VerifyCS.Diagnostic(PublicBoolPropertyNameAnalyzer.DiagnosticIdPublicBoolPropertyName).WithSpan(5, 22, 5, 26).WithArguments("Fips", "Fips");
+            var expected = VerifyCS.Diagnostic(PublicBoolPropertyNameAnalyzer.DiagnosticId).WithSpan(5, 22, 5, 26).WithArguments("Fips", "Fips");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
     }
