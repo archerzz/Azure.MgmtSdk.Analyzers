@@ -31,7 +31,7 @@ namespace Azure.MgmtSdk.Analyzers
         protected void MatchAndDiagnostic(Regex suffixRegex, string variableName, string variableType, List<string> targetName, List<string> targetType, DiagnosticDescriptor Rule, SyntaxNodeAnalysisContext context)
         {
             var match = suffixRegex.Match(variableName);
-            //Console.WriteLine("match: ", match);
+            
 
             if (match.Success || targetName.Exists(item => item == variableName))
             {
