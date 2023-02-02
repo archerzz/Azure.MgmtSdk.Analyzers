@@ -3,7 +3,7 @@
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
 
   <PropertyGroup>
-    <TargetFramework>net60</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <RootNamespace>AzureMgmtSDKAnalyzer.Vsix</RootNamespace>
     <AssemblyName>AzureMgmtSDKAnalyzer.Vsix</AssemblyName>
   </PropertyGroup>
