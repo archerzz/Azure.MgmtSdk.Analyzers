@@ -24,7 +24,7 @@ namespace Azure.MgmtSdk.Analyzers
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Warning, isEnabledByDefault: true,
             description: Description);
 
-        // Model suffix forbidden
+        // Problematic model suffix
         private static readonly Regex SuffixRegex = new Regex(".+(?<Suffix>(Requests?)|(Responses?)|(Parameters?)|(Options?)|(Collection))$");
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
@@ -38,25 +38,40 @@ namespace Azure.MgmtSdk.Analyzers
 
         private void SymbolAnalyzeSuffixBaisc(SymbolAnalysisContext context)
         {
-            var name = context.Symbol.Name;
+            var typeSymbol = (INamedTypeSymbol)context.Symbol;
+            if (!IsClass(typeSymbol))
+                return;
+
+            var name = typeSymbol.Name;
             if (ReservedNames.Contains(name))
                 return;
 
             var match = SuffixRegex.Match(name);
             if (match.Success)
             {
-                var typeSymbol = (INamedTypeSymbol)context.Symbol;
-                if (!IsClass(typeSymbol))
-                    return;
-
                 if (!HasModelsNamespace(typeSymbol))
                     return;
 
                 var suffix = match.Groups["Suffix"].Value;
+                var suggestedName = GetSuggestedName(name, suffix);
                 var diagnostic = Diagnostic.Create(Rule, context.Symbol.Locations[0],
-                    new Dictionary<string, string> { { "SuggestedName", name.Substring(0, name.Length - suffix.Length) } }.ToImmutableDictionary(), name, suffix);
+                    new Dictionary<string, string> { { "SuggestedName", suggestedName } }.ToImmutableDictionary(), name, suffix, suggestedName);
                 context.ReportDiagnostic(diagnostic);
             }
+        }
+
+        private string GetSuggestedName(string originalName, string suffix)
+        {
+            var nameWithoutSuffix = originalName.Substring(0, originalName.Length - suffix.Length);
+            return suffix switch
+            {
+                "Request" or "Requests" => $"'{nameWithoutSuffix}Content'",
+                "Parameter" or "Parameters" => $"'{nameWithoutSuffix}Content' or '{nameWithoutSuffix}Patch'",
+                "Option" or "Options" => $"'{nameWithoutSuffix}Config'",
+                "Response" => $"'{nameWithoutSuffix}Result'",
+                "Responses" => $"'{nameWithoutSuffix}Results'",
+                "Collection" => $"'{nameWithoutSuffix}Group' or '{nameWithoutSuffix}List'"
+            };
         }
     }
 

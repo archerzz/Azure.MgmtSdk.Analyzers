@@ -15,8 +15,8 @@ namespace Azure.MgmtSdk.Analyzers
     public class ModelNameSuffixAnalyzerBase : DiagnosticAnalyzer
     {
         protected static readonly string Title = "Improper model name suffix";
-        protected static readonly string MessageFormat = "Model name '{0}' ends with '{1}'";
-        protected static readonly string Description = "Suffix is not recommended. Consider to remove or modify.";
+        protected static readonly string MessageFormat = "Model name '{0}' ends with '{1}'. Suggest to rename it as {2}.";
+        protected static readonly string Description = "Suffix is not recommended. Consider to remove or modify it.";
 
         //public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => throw new NotImplementedException();
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray<DiagnosticDescriptor>.Empty;
@@ -27,12 +27,7 @@ namespace Azure.MgmtSdk.Analyzers
             context.EnableConcurrentExecution();
         }
 
-        protected bool IsClass(INamedTypeSymbol typeSymbol)
-        {
-            if (typeSymbol.TypeKind != TypeKind.Class)
-                return false;
-            return true;
-        }
+        protected bool IsClass(ITypeSymbol symbol) => symbol is { TypeKind: TypeKind.Class };
 
         protected bool HasModelsNamespace(INamedTypeSymbol typeSymbol)
         {

@@ -10,22 +10,40 @@ namespace Azure.MgmtSdk.Analyzers.Test
     public class ModelNameSuffixGeneralTests
     {
         [TestMethod]
-        public async Task AZM0010WithoutModels()
+        public async Task ClassNotUnderModelsNamespaceIsNotChecked()
         {
-            var test = @"using System;
+            var test = @"namespace Test;
 
 class MonitorResult
 {
-    static void Main()
-    {
-        Console.WriteLine(""Hello, world!"");
-    }
 }";
-            await VerifyCS.VerifyAnalyzerAsync(test); // Default No errors.
+            await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
         [TestMethod]
-        public async Task AZM0010ResponseParameters()
+        public async Task EnumIsNotChecked()
+        {
+            var test = @"namespace Test.Models;
+
+enum MonitorResult
+{
+}";
+            await VerifyCS.VerifyAnalyzerAsync(test);
+        }
+
+        [TestMethod]
+        public async Task GoodSuffix()
+        {
+            var test = @"namespace Test.Models;
+
+class MonitorContent
+{
+}";
+            await VerifyCS.VerifyAnalyzerAsync(test);
+        }
+
+        [TestMethod]
+        public async Task ParametersSuffix()
         {
             var test = @"namespace Test.Models
 {
@@ -33,42 +51,52 @@ class MonitorResult
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixGeneralAnalyzer.DiagnosticId).WithSpan(3, 18, 3, 36).WithArguments("ResponseParameters", "Parameters");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixGeneralAnalyzer.DiagnosticId).WithSpan(3, 18, 3, 36).WithArguments("ResponseParameters", "Parameters", "'ResponseContent' or 'ResponsePatch'");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
         [TestMethod]
-        public async Task AZM0010ClassResult()
+        public async Task ResultSuffix()
         {
             var test = @"namespace ResponseTest.Models
 {
-    public class ResponseParameter
+    public class NetworkRequest
     {
-        static void MainResponseParameter() {
-        
-        }
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixGeneralAnalyzer.DiagnosticId).WithSpan(3, 18, 3, 35).WithArguments("ResponseParameter", "Parameter");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixGeneralAnalyzer.DiagnosticId).WithSpan(3, 18, 3, 32).WithArguments("NetworkRequest", "Request", "'NetworkContent'");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
         [TestMethod]
-        public async Task AZM0010TwoNamespace()
+        public async Task OptionSuffixWithNestedNameSpace()
         {
             var test = @"namespace NamespaceTest.Models
 {
     namespace SubTest
     {
-        public class ResponseParameter
+        public class DiskOption
         {
-            static void MainResponseParameter() {
-        
-            }
         }
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixGeneralAnalyzer.DiagnosticId).WithSpan(5, 22, 5, 39).WithArguments("ResponseParameter", "Parameter");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixGeneralAnalyzer.DiagnosticId).WithSpan(5, 22, 5, 32).WithArguments("DiskOption", "Option", "'DiskConfig'");
+            await VerifyCS.VerifyAnalyzerAsync(test, expected);
+        }
+
+        [TestMethod]
+        public async Task ResponsesSuffix()
+        {
+            var test = @"namespace NamespaceTest.Models
+{
+    namespace SubTest
+    {
+        public class CreationResponses
+        {
+        }
+    }
+}";
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixGeneralAnalyzer.DiagnosticId).WithSpan(5, 22, 5, 39).WithArguments("CreationResponses", "Responses", "'CreationResults'");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
     }
