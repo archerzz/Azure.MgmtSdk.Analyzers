@@ -109,7 +109,7 @@ namespace Azure.MgmtSdk.Analyzers
                 if (!HasModelsNamespace(typeSymbol))
                     return;
 
-                if (ImplementsInterfaceOrBaseClass(typeSymbol, "ArmResource"))
+                if (ImplementsInterfaceOrClass(typeSymbol, "Azure.ResourceManager", "ArmResource"))
                     return;
 
                 var suffix = match.Groups["Suffix"].Value;
@@ -154,7 +154,7 @@ namespace Azure.MgmtSdk.Analyzers
                 if (!HasModelsNamespace(typeSymbol))
                     return;
 
-                if (ImplementsInterfaceOrBaseClass(typeSymbol, "ResourceData") || ImplementsInterfaceOrBaseClass(typeSymbol, "TrackedResourceData"))
+                if (ImplementsInterfaceOrClass(typeSymbol, "Azure.ResourceManager.Models", "ResourceData") || ImplementsInterfaceOrClass(typeSymbol, "Azure.ResourceManager.Models", "TrackedResourceData"))
                     return;
 
                 var suffix = match.Groups["Suffix"].Value;
@@ -203,7 +203,7 @@ namespace Azure.MgmtSdk.Analyzers
                 if (typeSymbol.ToString().EndsWith("<T>"))
                     return;
 
-                if (ImplementsInterfaceOrBaseClass(typeSymbol, "Operation<T>"))
+                if (ImplementsInterfaceOrClass(typeSymbol, "Azure", "Operation<T>"))
                     return;
 
                 var suffix = match.Groups["Suffix"].Value;

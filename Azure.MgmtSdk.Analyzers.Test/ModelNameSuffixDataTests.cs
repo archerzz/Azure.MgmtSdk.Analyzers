@@ -14,51 +14,69 @@ namespace Azure.MgmtSdk.Analyzers.Test
     public class ModelNameSuffixConditionDataTests
     {
         [TestMethod]
-        public async Task AZM0012DataNoModels()
+        public async Task ClassUnderNonModelsNamespaceIsNotChecked()
         {
             var test = @"
 namespace Azure.ResourceManager.Network.Temp
 {
-    public class ArmResource {
-    }
-    public partial class AadAuthenticationData: ArmResource
+    public partial class AadAuthenticationData
     {
     }
 }";
-            await VerifyCS.VerifyAnalyzerAsync(test); // Default No errors.
+            await VerifyCS.VerifyAnalyzerAsync(test);
         }
 
         [TestMethod]
-        public async Task AZM0012DataWithModels()
+        public async Task ModelClassWithDataSuffix()
         {
             var test = @"
 namespace Azure.ResourceManager.Network.Models
 {
-    public class ArmResource {
-    }
-    public partial class AadAuthenticationData: ArmResource
+    public partial class AadAuthenticationData
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixDataAnalyzer.DiagnosticId).WithSpan(6, 26, 6, 47).WithArguments("AadAuthenticationData", "Data");
+            var expected = VerifyCS.Diagnostic(ModelNameSuffixDataAnalyzer.DiagnosticId).WithSpan(4, 26, 4, 47).WithArguments("AadAuthenticationData", "Data");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
         [TestMethod]
-        public async Task AZM0012DataBaseTrackedResourceData()
+        public async Task ResourceDataClassesAreNotChecked()
         {
             var test = @"
+using Azure.ResourceManager.Models;
+namespace Azure.ResourceManager.Models
+{
+    public class ResourceData {
+    }
+}
 namespace Azure.ResourceManager.Network.Models
+{
+    public partial class AadAuthenticationData: ResourceData
+    {
+    }
+}";
+            await VerifyCS.VerifyAnalyzerAsync(test);
+        }
+
+        [TestMethod]
+        public async Task TrackedResourceDataClassesAreNotChecked()
+        {
+            var test = @"
+using Azure.ResourceManager.Models;
+namespace Azure.ResourceManager.Models
 {
     public class TrackedResourceData {
     }
+}
+namespace Azure.ResourceManager.Network.Models
+{
     public partial class AadAuthenticationData: TrackedResourceData
     {
     }
 }";
-            await VerifyCS.VerifyAnalyzerAsync(test); // Default No errors.
+            await VerifyCS.VerifyAnalyzerAsync(test);
         }
-
     }
 }
 

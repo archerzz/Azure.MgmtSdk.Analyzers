@@ -6,6 +6,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text.RegularExpressions;
+using System.Text;
+using System.Data;
 
 namespace Azure.MgmtSdk.Analyzers
 {
@@ -44,29 +46,32 @@ namespace Azure.MgmtSdk.Analyzers
             return hasNamespaceModels;
         }
 
-        protected bool ImplementsInterfaceOrBaseClass(INamedTypeSymbol typeSymbol, string nameToCheck)
+        protected bool ImplementsInterfaceOrClass(INamedTypeSymbol typeSymbol, string namespaceName, string typeName)
         {
-            if (typeSymbol == null)
+            if (typeSymbol is null)
                 return false;
 
-            // judge base classes
-            if (typeSymbol.MetadataName == nameToCheck)
-                return true;
-
-            INamedTypeSymbol tempSymbol = typeSymbol;
-            while (tempSymbol.BaseType != null)
+            // check class hierachy
+            INamedTypeSymbol classType = typeSymbol;
+            while (classType is not null)
             {
-                tempSymbol = tempSymbol.BaseType;
-                if (tempSymbol.MetadataName == nameToCheck)
+                if (classType.MetadataName == typeName && classType.ContainingNamespace.GetFullNamespaceName() == namespaceName)
                     return true;
+                classType = classType.BaseType;
+            };
+
+            // check interfaces
+            return typeSymbol.AllInterfaces.Any(@interface => @interface.MetadataName == typeName && @interface.ContainingNamespace.Name == namespaceName);
+        }
+
+        private string GetFullNamespace(INamespaceSymbol namespaceSymbol)
+        {
+            if (namespaceSymbol is { ContainingNamespace: not null and { IsGlobalNamespace: false} })
+            {
+                return GetFullNamespace(namespaceSymbol.ContainingNamespace) + "." + namespaceSymbol.Name;
             }
 
-            // judge interfaces
-            foreach (var @interface in typeSymbol.AllInterfaces)
-                if (@interface.MetadataName == nameToCheck)
-                    return true;
-
-            return false;
+            return namespaceSymbol.Name;
         }
     }
 }
