@@ -5,10 +5,11 @@ using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 
 using VerifyCS = AzureMgmtSDKAnalyzer.Test.CSharpCodeFixVerifier<
-    Azure.MgmtSdk.Analyzers.ModelNameSuffixDataAnalyzer,
+    Azure.MgmtSdk.Analyzers.ModelName.ModelNameSuffixDataAnalyzer,
     Azure.MgmtSdk.Analyzers.ModelNameSuffixCodeFixProvider>;
+using Azure.MgmtSdk.Analyzers.ModelName;
 
-namespace Azure.MgmtSdk.Analyzers.Test
+namespace Azure.MgmtSdk.Analyzers.Test.ModelName
 {
     [TestClass]
     public class ModelNameSuffixConditionDataTests

@@ -1,10 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Azure.MgmtSdk.Analyzers.ModelName;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using VerifyCS = AzureMgmtSDKAnalyzer.Test.CSharpCodeFixVerifier<
-    Azure.MgmtSdk.Analyzers.ModelNameSuffixGeneralAnalyzer,
+    Azure.MgmtSdk.Analyzers.ModelName.ModelNameSuffixGeneralAnalyzer,
     Azure.MgmtSdk.Analyzers.ModelNameSuffixCodeFixProvider>;
 
-namespace Azure.MgmtSdk.Analyzers.Test
+namespace Azure.MgmtSdk.Analyzers.Test.ModelName
 {
     [TestClass]
     public class ModelNameSuffixGeneralTests

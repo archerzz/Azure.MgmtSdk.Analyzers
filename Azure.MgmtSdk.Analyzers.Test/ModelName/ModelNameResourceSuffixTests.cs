@@ -1,10 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Azure.MgmtSdk.Analyzers.ModelName;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using VerifyCS = AzureMgmtSDKAnalyzer.Test.CSharpCodeFixVerifier<
-    Azure.MgmtSdk.Analyzers.ModelNameSuffixResourceAnalyzer,
+    Azure.MgmtSdk.Analyzers.ModelName.ModelNameResourceSuffixAnalyzer,
     Azure.MgmtSdk.Analyzers.ModelNameSuffixCodeFixProvider>;
 
-namespace Azure.MgmtSdk.Analyzers.Test
+namespace Azure.MgmtSdk.Analyzers.Test.ModelName
 {
     [TestClass]
     public class ModelNameSuffixResourceTests
@@ -33,7 +34,7 @@ class MonitorResult
     {
     }
 }";
-            var expected = VerifyCS.Diagnostic(ModelNameSuffixResourceAnalyzer.DiagnosticId).WithSpan(3, 18, 3, 30).WithArguments("TestResource", "Resource");
+            var expected = VerifyCS.Diagnostic(ModelNameResourceSuffixAnalyzer.DiagnosticId).WithSpan(3, 18, 3, 30).WithArguments("TestResource", "Resource");
             await VerifyCS.VerifyAnalyzerAsync(test, expected);
         }
 
