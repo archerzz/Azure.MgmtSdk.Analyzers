@@ -21,6 +21,17 @@ class MonitorResult
         }
 
         [TestMethod]
+        public async Task OnlyModelsNamespaceIsChecked()
+        {
+            var test = @"namespace Test.AModels;
+
+class MonitorResult
+{
+}";
+            await VerifyCS.VerifyAnalyzerAsync(test);
+        }
+
+        [TestMethod]
         public async Task EnumIsNotChecked()
         {
             var test = @"namespace Test.Models;

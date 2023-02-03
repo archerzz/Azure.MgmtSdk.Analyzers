@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text.RegularExpressions;
@@ -18,7 +19,6 @@ namespace Azure.MgmtSdk.Analyzers
         protected static readonly string MessageFormat = "Model name '{0}' ends with '{1}'. Suggest to rename it as {2}.";
         protected static readonly string Description = "Suffix is not recommended. Consider to remove or modify it.";
 
-        //public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => throw new NotImplementedException();
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray<DiagnosticDescriptor>.Empty;
 
         public override void Initialize(AnalysisContext context)
@@ -35,7 +35,7 @@ namespace Azure.MgmtSdk.Analyzers
             for (var namespaceSymbol = typeSymbol.ContainingNamespace; namespaceSymbol != null; namespaceSymbol = namespaceSymbol.ContainingNamespace)
             {
                 var fullNamespace = namespaceSymbol.Name;
-                if (fullNamespace.Contains("Models"))
+                if (fullNamespace.Split('.').Any(name => name.Equals("Models")))
                 {
                     hasNamespaceModels = true;
                     break;
@@ -43,6 +43,7 @@ namespace Azure.MgmtSdk.Analyzers
             }
             return hasNamespaceModels;
         }
+
         protected bool ImplementsInterfaceOrBaseClass(INamedTypeSymbol typeSymbol, string nameToCheck)
         {
             if (typeSymbol == null)
