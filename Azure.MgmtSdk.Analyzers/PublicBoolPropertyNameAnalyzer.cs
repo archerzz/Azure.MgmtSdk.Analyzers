@@ -40,13 +40,11 @@ namespace Azure.MgmtSdk.Analyzers
         private void SyntaxAnalyzePublicBoolPropertyName(SyntaxNodeAnalysisContext context)
         {
             PropertyDeclarationSyntax node = (PropertyDeclarationSyntax)context.Node;
-            //Console.WriteLine("{0}{1} {2}", "node: ", node, node.Initializer);
             var variableName = node.Identifier.ToString();
             var variableType = node.Type;
 
             if (!variableType.ToString().Contains("bool")) // include 'bool' and 'bool?'
                 return;
-            //Console.WriteLine("{0}{1}", "variableName: ", variableName);
 
             var match = prefixRegex.Match(variableName);
 

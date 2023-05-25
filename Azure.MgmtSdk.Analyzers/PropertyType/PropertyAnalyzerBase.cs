@@ -8,15 +8,15 @@ using System.Data;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace Azure.MgmtSdk.Analyzers
+namespace Azure.MgmtSdk.Analyzers.PropertyType
 {
     /// <summary>
     /// Analyzer to check type name suffixes. This file contains the base class.
     /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class DataPropertyAnalyzerBase : DiagnosticAnalyzer
+    public class PropertyAnalyzerBase : DiagnosticAnalyzer
     {
-        protected static readonly string Title = "Potential improper data type of propert";
+        protected static readonly string Title = "Potential improper data type of property";
         protected static readonly string MessageFormat = "Property {0} looks like an '{1}'.";
         protected static readonly string Description = "Check the real return value and consider changing the type to '{1}'.";
 
@@ -31,7 +31,6 @@ namespace Azure.MgmtSdk.Analyzers
         protected void MatchAndDiagnostic(Regex suffixRegex, string variableName, string variableType, List<string> targetName, List<string> targetType, DiagnosticDescriptor Rule, SyntaxNodeAnalysisContext context)
         {
             var match = suffixRegex.Match(variableName);
-            //Console.WriteLine("match: ", match);
 
             if (match.Success || targetName.Exists(item => item == variableName))
             {

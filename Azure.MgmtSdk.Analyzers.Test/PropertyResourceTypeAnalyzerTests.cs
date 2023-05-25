@@ -1,12 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Azure.MgmtSdk.Analyzers.PropertyType;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using VerifyCS = AzureMgmtSDKAnalyzer.Test.CSharpAnalyzerVerifier<
-    Azure.MgmtSdk.Analyzers.DataPropertyResourceTypeAnalyzer>;
+    Azure.MgmtSdk.Analyzers.PropertyType.PropertyResourceTypeAnalyzer>;
 
 namespace Azure.MgmtSdk.Analyzers.Test
 {
     [TestClass]
-    public class DataPropertyResourceTypeAnalyzerTests
+    public class PropertyResourceTypeAnalyzerTests
     {
         [TestMethod]
         public async Task ValidCases()
@@ -42,8 +43,8 @@ namespace Azure.ResourceManager.Network
         public static readonly string ResourceType;    
     }
 }";
-            await VerifyCS.VerifyAnalyzerAsync(test1, VerifyCS.Diagnostic(DataPropertyResourceTypeAnalyzer.DiagnosticId).WithSpan(5, 23, 5, 35).WithArguments("ResourceType", "string"));
-            await VerifyCS.VerifyAnalyzerAsync(test2, VerifyCS.Diagnostic(DataPropertyResourceTypeAnalyzer.DiagnosticId).WithSpan(5, 39, 5, 51).WithArguments("ResourceType", "string"));
+            await VerifyCS.VerifyAnalyzerAsync(test1, VerifyCS.Diagnostic(PropertyResourceTypeAnalyzer.DiagnosticId).WithSpan(5, 23, 5, 35).WithArguments("ResourceType", "string"));
+            await VerifyCS.VerifyAnalyzerAsync(test2, VerifyCS.Diagnostic(PropertyResourceTypeAnalyzer.DiagnosticId).WithSpan(5, 39, 5, 51).WithArguments("ResourceType", "string"));
         }
     }
 }

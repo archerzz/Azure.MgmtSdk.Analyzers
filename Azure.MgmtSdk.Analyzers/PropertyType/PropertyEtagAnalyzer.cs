@@ -7,23 +7,23 @@ using System;
 using System.Collections.Immutable;
 using System.Text.RegularExpressions;
 
-namespace Azure.MgmtSdk.Analyzers
+namespace Azure.MgmtSdk.Analyzers.PropertyType
 {
     /// <summary>
     /// Analyzer to check resource type 'ResouceType'.
     /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class DataPropertyResourceTypeAnalyzer : DataPropertyAnalyzerBase
+    public class PropertyEtagAnalyzer : PropertyAnalyzerBase
     {
-        public const string DiagnosticId = "AZM0042";
+        public const string DiagnosticId = "AZM0043";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title,
             MessageFormat, DiagnosticCategory.Naming, DiagnosticSeverity.Info, isEnabledByDefault: true,
             description: Description);
 
         private static readonly Regex suffixRegex = new Regex("");
-        protected static List<string> targetName = new List<string> { "ResourceType" };
-        protected static List<string> targetType = new List<string> { "ResourceType", "ResourceType?", "Azure.Core.ResourceType", "Azure.Core.ResourceType?" };
+        protected static List<string> targetName = new List<string> { "Etag", "ETag" };
+        protected static List<string> targetType = new List<string> { "ETag", "ETag?", "Azure.Core.ETag", "Azure.Core.ETag?" };
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
@@ -31,11 +31,11 @@ namespace Azure.MgmtSdk.Analyzers
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
             context.EnableConcurrentExecution();
-            context.RegisterSyntaxNodeAction(SyntaxAnalyzeDataPropertyResourceTypeVariableName, SyntaxKind.VariableDeclaration);
-            context.RegisterSyntaxNodeAction(SyntaxAnalyzeDataPropertyResourceTypePropertyName, SyntaxKind.PropertyDeclaration);
+            context.RegisterSyntaxNodeAction(SyntaxAnalyzeDataPropertyEtagVariableName, SyntaxKind.VariableDeclaration);
+            context.RegisterSyntaxNodeAction(SyntaxAnalyzeDataPropertyEtagPropertyName, SyntaxKind.PropertyDeclaration);
         }
 
-        private void SyntaxAnalyzeDataPropertyResourceTypeVariableName(SyntaxNodeAnalysisContext context)
+        private void SyntaxAnalyzeDataPropertyEtagVariableName(SyntaxNodeAnalysisContext context)
         {
             VariableDeclarationSyntax node = (VariableDeclarationSyntax)context.Node;
             var variableName = node.Variables.ToString();
@@ -43,7 +43,7 @@ namespace Azure.MgmtSdk.Analyzers
             MatchAndDiagnostic(suffixRegex, variableName, variableType, targetName, targetType, Rule, context);
         }
 
-        private void SyntaxAnalyzeDataPropertyResourceTypePropertyName(SyntaxNodeAnalysisContext context)
+        private void SyntaxAnalyzeDataPropertyEtagPropertyName(SyntaxNodeAnalysisContext context)
         {
             PropertyDeclarationSyntax node = (PropertyDeclarationSyntax)context.Node;
             var variableName = node.Identifier.ToString();

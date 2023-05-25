@@ -1,12 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using VerifyCS = AzureMgmtSDKAnalyzer.Test.CSharpAnalyzerVerifier<
-    Azure.MgmtSdk.Analyzers.DataPropertyEtagAnalyzer>;
+    Azure.MgmtSdk.Analyzers.PropertyType.PropertyEtagAnalyzer>;
+using Azure.MgmtSdk.Analyzers.PropertyType;
 
 namespace Azure.MgmtSdk.Analyzers.Test
 {
     [TestClass]
-    public class DataPropertyEtagTests
+    public class PropertyEtagTests
     {
         [TestMethod]
         public async Task ValidCases()
@@ -36,7 +37,7 @@ namespace Azure.MgmtSdk.Analyzers.Test
         public string Etag { get; set; }
     }
 }";
-            await VerifyCS.VerifyAnalyzerAsync(test1, VerifyCS.Diagnostic(DataPropertyEtagAnalyzer.DiagnosticId).WithSpan(5, 23, 5, 27).WithArguments("Etag", "string"));
+            await VerifyCS.VerifyAnalyzerAsync(test1, VerifyCS.Diagnostic(PropertyEtagAnalyzer.DiagnosticId).WithSpan(5, 23, 5, 27).WithArguments("Etag", "string"));
         }
 
     }

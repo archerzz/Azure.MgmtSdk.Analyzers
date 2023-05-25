@@ -1,12 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Azure.MgmtSdk.Analyzers.PropertyType;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using VerifyCS = AzureMgmtSDKAnalyzer.Test.CSharpAnalyzerVerifier<
-    Azure.MgmtSdk.Analyzers.DataPropertyResourceIdentifierAnalyzer>;
+    Azure.MgmtSdk.Analyzers.PropertyType.PropertyResourceIdentifierAnalyzer>;
 
 namespace Azure.MgmtSdk.Analyzers.Test
 {
     [TestClass]
-    public class DataPropertyResourceIdentifierAnalyzerTests
+    public class PropertyResourceIdentifierAnalyzerTests
     {
         [TestMethod]
         public async Task ValidCases()
@@ -42,8 +43,8 @@ namespace Azure.ResourceManager.Network
         public static readonly string DefaultOriginGroupResourceIdentifier; 
     }
 }";
-            await VerifyCS.VerifyAnalyzerAsync(test1, VerifyCS.Diagnostic(DataPropertyResourceIdentifierAnalyzer.DiagnosticId).WithSpan(5, 23, 5, 59).WithArguments("DefaultOriginGroupResourceIdentifier", "string"));
-            await VerifyCS.VerifyAnalyzerAsync(test2, VerifyCS.Diagnostic(DataPropertyResourceIdentifierAnalyzer.DiagnosticId).WithSpan(5, 39, 5, 75).WithArguments("DefaultOriginGroupResourceIdentifier", "string"));
+            await VerifyCS.VerifyAnalyzerAsync(test1, VerifyCS.Diagnostic(PropertyResourceIdentifierAnalyzer.DiagnosticId).WithSpan(5, 23, 5, 59).WithArguments("DefaultOriginGroupResourceIdentifier", "string"));
+            await VerifyCS.VerifyAnalyzerAsync(test2, VerifyCS.Diagnostic(PropertyResourceIdentifierAnalyzer.DiagnosticId).WithSpan(5, 39, 5, 75).WithArguments("DefaultOriginGroupResourceIdentifier", "string"));
         }
     }
 }
