@@ -14,7 +14,6 @@ namespace Azure.MgmtSdk.Analyzers.ModelName
     /// <summary>
     /// Analyzer to check type name suffixes. This file contains the base class.
     /// </summary>
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public abstract class ModelNameSuffixAnalyzerBase : DiagnosticAnalyzer
     {
         protected static readonly string Title = "Improper model name suffix";

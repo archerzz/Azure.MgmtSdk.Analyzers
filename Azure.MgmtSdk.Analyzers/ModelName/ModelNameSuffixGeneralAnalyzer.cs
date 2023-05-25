@@ -12,6 +12,7 @@ namespace Azure.MgmtSdk.Analyzers.ModelName
     /// <summary>
     /// Analyzer to check type name suffixes. This file contains some methods that deal with different conditions.
     /// </summary>
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ModelNameSuffixGeneralAnalyzer : ModelNameSuffixAnalyzerBase
     {
         public const string DiagnosticId = "AZM0010";

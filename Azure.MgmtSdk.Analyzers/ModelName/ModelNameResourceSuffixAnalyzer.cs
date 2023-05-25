@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace Azure.MgmtSdk.Analyzers.ModelName
 {
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ModelNameResourceSuffixAnalyzer : ModelNameSuffixAnalyzerBase
     {
         public const string DiagnosticId = "AZM0014";

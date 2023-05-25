@@ -13,7 +13,6 @@ namespace Azure.MgmtSdk.Analyzers.PropertyType
     /// <summary>
     /// Analyzer to check type name suffixes. This file contains the base class.
     /// </summary>
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class PropertyAnalyzerBase : DiagnosticAnalyzer
     {
         protected static readonly string Title = "Potential improper data type of property";
