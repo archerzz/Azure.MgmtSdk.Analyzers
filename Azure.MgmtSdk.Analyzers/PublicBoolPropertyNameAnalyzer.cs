@@ -16,7 +16,7 @@ namespace Azure.MgmtSdk.Analyzers
     public class PublicBoolPropertyNameAnalyzer : DiagnosticAnalyzer
     {
         protected static readonly string Title = "Improper public bool property";
-        protected static readonly string MessageFormat = "Property name '{0}' ends with '{1}'";
+        protected static readonly string MessageFormat = "Boolean property name '{0}' should have prefix 'Is', 'Has', 'Can', or 'Enable'.";
         protected static readonly string Description = "PropertyName is not recommended. Consider to add a verb as prefix.";
 
         public const string DiagnosticId = "AZM0020";
@@ -51,7 +51,7 @@ namespace Azure.MgmtSdk.Analyzers
             if (!match.Success)
             {
                 var diagnostic = Diagnostic.Create(Rule, context.ContainingSymbol.Locations[0],
-                    new Dictionary<string, string> { { "SuggestedName", variableName.Substring(0, variableName.Length) } }.ToImmutableDictionary(), variableName, variableName);
+                    new Dictionary<string, string> { { "SuggestedName", variableName.Substring(0, variableName.Length) } }.ToImmutableDictionary(), variableName);
                 context.ReportDiagnostic(diagnostic);
             }
 
