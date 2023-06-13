@@ -16,7 +16,7 @@ namespace Azure.MgmtSdk.Analyzers
     public class PublicBoolPropertyNameAnalyzer : DiagnosticAnalyzer
     {
         protected static readonly string Title = "Improper public bool property";
-        protected static readonly string MessageFormat = "Boolean property name '{0}' should have prefix 'Is', 'Has', 'Can', or 'Enable'.";
+        protected static readonly string MessageFormat = "Boolean property name '{0}' should have prefix 'Is', 'Has', 'Can', or 'Enable'";
         protected static readonly string Description = "PropertyName is not recommended. Consider to add a verb as prefix.";
 
         public const string DiagnosticId = "AZM0020";

@@ -19,7 +19,7 @@ namespace Azure.MgmtSdk.Analyzers
         public const string DiagnosticId = "AZM0030";
 
         protected static readonly string Title = "Improper interval property name";
-        protected static readonly string MessageFormat = "Property name '{0}' should end with units.";
+        protected static readonly string MessageFormat = "Property name '{0}' should end with units";
         protected static readonly string Description = "Property is of integer type. Consider to append unit to the name, like \"InSeconds\".";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title,
