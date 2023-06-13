@@ -38,6 +38,10 @@ namespace Azure.MgmtSdk.Analyzers.PropertyType
         private void SyntaxAnalyzeDataPropertyResourceTypeVariableName(SyntaxNodeAnalysisContext context)
         {
             VariableDeclarationSyntax node = (VariableDeclarationSyntax)context.Node;
+            if (AnalyzerUtils.IsNotSdkCode(node, context.SemanticModel))
+            {
+                return;
+            }
             var variableName = node.Variables.ToString();
             var variableType = node.Type.ToString();
             MatchAndDiagnostic(suffixRegex, variableName, variableType, targetName, targetType, Rule, context);
@@ -46,6 +50,10 @@ namespace Azure.MgmtSdk.Analyzers.PropertyType
         private void SyntaxAnalyzeDataPropertyResourceTypePropertyName(SyntaxNodeAnalysisContext context)
         {
             PropertyDeclarationSyntax node = (PropertyDeclarationSyntax)context.Node;
+            if (AnalyzerUtils.IsNotSdkCode(node, context.SemanticModel))
+            {
+                return;
+            }
             var variableName = node.Identifier.ToString();
             var variableType = node.Type.ToString();
             MatchAndDiagnostic(suffixRegex, variableName, variableType, targetName, targetType, Rule, context);

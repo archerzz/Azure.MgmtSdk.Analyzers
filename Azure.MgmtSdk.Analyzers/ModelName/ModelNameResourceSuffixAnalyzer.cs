@@ -23,7 +23,9 @@ namespace Azure.MgmtSdk.Analyzers.ModelName
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
 
-        protected override bool ShouldSkip(INamedTypeSymbol symbol) => ReservedResourceNames.Contains(symbol.Name);
+        protected override bool ShouldSkip(INamedTypeSymbol symbol) => ReservedResourceNames.Contains(symbol.Name) ||
+            AnalyzerUtils.IsNotSdkCode(symbol);
+
         protected override Regex MatchRegex => ResourceSuffixRegex;
         protected override Diagnostic GetDiagnostic(INamedTypeSymbol typeSymbol, string suffix, SymbolAnalysisContext context)
         {

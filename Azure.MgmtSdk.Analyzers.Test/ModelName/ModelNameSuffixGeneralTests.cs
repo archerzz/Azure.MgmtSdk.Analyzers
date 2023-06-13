@@ -13,7 +13,7 @@ namespace Azure.MgmtSdk.Analyzers.Test.ModelName
         [TestMethod]
         public async Task ClassNotUnderModelsNamespaceIsNotChecked()
         {
-            var test = @"namespace Test;
+            var test = @"namespace Azure.ResourceManager;
 
 class MonitorResult
 {
@@ -24,7 +24,7 @@ class MonitorResult
         [TestMethod]
         public async Task OnlyModelsNamespaceIsChecked()
         {
-            var test = @"namespace Test.AModels;
+            var test = @"namespace Azure.ResourceManager.AModels;
 
 class MonitorResult
 {
@@ -35,7 +35,7 @@ class MonitorResult
         [TestMethod]
         public async Task EnumIsNotChecked()
         {
-            var test = @"namespace Test.Models;
+            var test = @"namespace Azure.ResourceManager.Models;
 
 enum MonitorResult
 {
@@ -46,7 +46,7 @@ enum MonitorResult
         [TestMethod]
         public async Task GoodSuffix()
         {
-            var test = @"namespace Test.Models;
+            var test = @"namespace Azure.ResourceManager.Models;
 
 class MonitorContent
 {
@@ -57,7 +57,7 @@ class MonitorContent
         [TestMethod]
         public async Task ParametersSuffix()
         {
-            var test = @"namespace Test.Models
+            var test = @"namespace Azure.ResourceManager.Models
 {
     public class ResponseParameters
     {
@@ -70,7 +70,7 @@ class MonitorContent
         [TestMethod]
         public async Task ResultSuffix()
         {
-            var test = @"namespace ResponseTest.Models
+            var test = @"namespace Azure.ResourceManager.Models
 {
     public class NetworkRequest
     {
@@ -83,7 +83,7 @@ class MonitorContent
         [TestMethod]
         public async Task OptionSuffixWithNestedNameSpace()
         {
-            var test = @"namespace NamespaceTest.Models
+            var test = @"namespace Azure.ResourceManager.Models
 {
     namespace SubTest
     {
@@ -99,7 +99,7 @@ class MonitorContent
         [TestMethod]
         public async Task ResponsesSuffix()
         {
-            var test = @"namespace NamespaceTest.Models
+            var test = @"namespace Azure.ResourceManager.Models
 {
     namespace SubTest
     {

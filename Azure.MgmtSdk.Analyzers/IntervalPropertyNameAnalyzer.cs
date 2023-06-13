@@ -39,6 +39,11 @@ namespace Azure.MgmtSdk.Analyzers
 
         private void AnalyzeIntervalProperty(SymbolAnalysisContext context)
         {
+            if (AnalyzerUtils.IsNotSdkCode(context.Symbol))
+            {
+                return;
+            }
+
             var name = context.Symbol.Name;
             if (SuffixRegex.IsMatch(name))
             {

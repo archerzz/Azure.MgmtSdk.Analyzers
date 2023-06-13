@@ -38,6 +38,10 @@ namespace Azure.MgmtSdk.Analyzers.PropertyType
         private void SyntaxAnalyzeDataPropertyEtagVariableName(SyntaxNodeAnalysisContext context)
         {
             VariableDeclarationSyntax node = (VariableDeclarationSyntax)context.Node;
+            if (AnalyzerUtils.IsNotSdkCode(node, context.SemanticModel))
+            {
+                return;
+            }
             var variableName = node.Variables.ToString();
             var variableType = node.Type.ToString();
             MatchAndDiagnostic(suffixRegex, variableName, variableType, targetName, targetType, Rule, context);

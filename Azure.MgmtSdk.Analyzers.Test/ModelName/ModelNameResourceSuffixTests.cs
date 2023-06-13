@@ -15,11 +15,14 @@ namespace Azure.MgmtSdk.Analyzers.Test.ModelName
         {
             var test = @"using System;
 
-class MonitorResult
+namespace Azure.ResourceManager.Models
 {
-    static void Main()
+    class MonitorResult
     {
-        Console.WriteLine(""Hello, world!"");
+        static void Main()
+        {
+            Console.WriteLine(""Hello, world!"");
+        }
     }
 }";
             await VerifyCS.VerifyAnalyzerAsync(test); // Default No errors.
@@ -28,7 +31,7 @@ class MonitorResult
         [TestMethod]
         public async Task AZM0014TestResource()
         {
-            var test = @"namespace Test.Models
+            var test = @"namespace Azure.ResourceManager.Models
 {
     public class TestResource
     {
@@ -41,7 +44,7 @@ class MonitorResult
         [TestMethod]
         public async Task AZM0014GenericResource()
         {
-            var test = @"namespace Test.Models
+            var test = @"namespace Azure.ResourceManager.Models
 {
     public class GenericResource
     {
@@ -53,7 +56,7 @@ class MonitorResult
         [TestMethod]
         public async Task AZM0014PrivateLinkServiceResource()
         {
-            var test = @"namespace Test.Models
+            var test = @"namespace Azure.ResourceManager.Models
 {
     public class PrivateLinkServiceResource
     {

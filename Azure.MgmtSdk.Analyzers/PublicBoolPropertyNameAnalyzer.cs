@@ -40,6 +40,11 @@ namespace Azure.MgmtSdk.Analyzers
         private void SyntaxAnalyzePublicBoolPropertyName(SyntaxNodeAnalysisContext context)
         {
             PropertyDeclarationSyntax node = (PropertyDeclarationSyntax)context.Node;
+            if (AnalyzerUtils.IsNotSdkCode(node, context.SemanticModel))
+            {
+                return;
+            }
+
             var variableName = node.Identifier.ToString();
             var variableType = node.Type;
 

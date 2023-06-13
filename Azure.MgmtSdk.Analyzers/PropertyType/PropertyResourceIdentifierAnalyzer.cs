@@ -46,6 +46,10 @@ namespace Azure.MgmtSdk.Analyzers.PropertyType
         private void SyntaxAnalyzeDataPropertyResourceIdentifierPropertyName(SyntaxNodeAnalysisContext context)
         {
             PropertyDeclarationSyntax node = (PropertyDeclarationSyntax)context.Node;
+            if (AnalyzerUtils.IsNotSdkCode(node, context.SemanticModel))
+            {
+                return;
+            }
             var variableName = node.Identifier.ToString();
             var variableType = node.Type.ToString();
             MatchAndDiagnostic(suffixRegex, variableName, variableType, targetName, targetType, Rule, context);
